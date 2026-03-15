@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file .env --watch src/servidor.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --env-file=.env --import tsx --watch src/servidor.ts",
+    "build": "tsc && tsc-alias",
+    "start": "node dist/servidor.js"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,14 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "pg": "^8.19.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.0",
+    "@types/pg": "^8.18.0",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }
