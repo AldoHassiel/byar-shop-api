@@ -1,9 +1,14 @@
 import { Router } from "express";
+import {
+  registrar,
+  iniciarSesion,
+  cerrarSesion,
+} from "./autenticacion.controlador.js";
 
 const enrutador = Router();
 
-enrutador.post("/login", (req, res) => {});
-enrutador.post("/registrar", async (req, res) => {});
-enrutador.post("/logout", async (req, res) => {});
+enrutador.post("/auth/registrar", registrar);
+enrutador.post("/auth/iniciarSesion", iniciarSesion);
+enrutador.get("/auth/cerrarSesion", cerrarSesion);
 
 export default enrutador;
