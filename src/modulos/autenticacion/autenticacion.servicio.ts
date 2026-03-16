@@ -2,7 +2,7 @@ import { db } from "@/config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { SECRETO_JWT } from "@/config/global.js";
-import { SAL_JWT } from "@/config/global.js";
+import { SAL } from "@/config/global.js";
 import {
   type RegistroDTO,
   type InicioSesionDTO,
@@ -28,15 +28,31 @@ const registrar = async (datosUsuario: RegistroDTO) => {
   const { nombre, apellidos, telefono, correo, pwd } = datosUsuario;
 
   const { rows: existentes } = await db.query(
-    "SELECT id FROM usuarios WHERE correo = $1",
+    "SELECT id, pwd FROM usuarios WHERE correo = $1",
     [correo],
   );
 
   if (existentes.length > 0) {
-    throw new Error("El correo ya está registrado");
+    const esPwdValido = await bcrypt.compare(pwd, existentes[0].pwd);
+
+    if (!esPwdValido) {
+      throw new Error("El correo ya está registrado");
+    }
+
+    const { rows } = await db.query(
+      `
+      UPDATE usuarios SET activo = $1 WHERE id = $2
+      RETURNING id, nombre, apellidos, telefono, correo, es_admin`,
+      [true, existentes[0].id],
+    );
+
+    const usuario = rows[0];
+    const token = generarToken(usuario);
+
+    return { token, usuario };
   }
 
-  const sal = await bcrypt.genSalt(SAL_JWT);
+  const sal = await bcrypt.genSalt(SAL);
   const pwdEncriptado = await bcrypt.hash(pwd, sal);
 
   const { rows } = await db.query(
@@ -56,10 +72,10 @@ const iniciarSesion = async (datos: InicioSesionDTO) => {
   const { correo, pwd } = datos;
 
   const { rows } = await db.query(
-    `SELECT id, nombre, apellidos, telefono, correo, pwd, es_admin
+    `SELECT id, nombre, apellidos, telefono, correo, pwd, es_admin, activo
     FROM usuarios
-    WHERE correo = $1`,
-    [correo],
+    WHERE correo = $1 AND activo = $2`,
+    [correo, true],
   );
 
   if (rows.length === 0) {
