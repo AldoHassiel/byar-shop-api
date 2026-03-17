@@ -10,4 +10,22 @@ enrutador.get(
   ControladorCategoria.obtenerCategorias,
 );
 
+enrutador.get(
+  "/categorias/:id",
+  Middle.leerToken,
+  ControladorCategoria.obtenerCategoria,
+);
+
+enrutador.post(
+  "/categorias",
+  Middle.eresAdmin,
+  ControladorCategoria.crearCategoria,
+);
+
+enrutador.delete(
+  "/categorias/:id",
+  Middle.eresAdmin,
+  ControladorCategoria.eliminarCategoria,
+);
+
 export default enrutador;
