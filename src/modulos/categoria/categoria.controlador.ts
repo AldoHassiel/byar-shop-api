@@ -85,7 +85,7 @@ const eliminarCategoria = async (req: Request, res: Response) => {
 
   try {
     await ServicioCategorias.eliminarCategoria(Number(id));
-    return respuestaOk(res, "Eliminado con éxito");
+    return respuestaOk(res, "Categoría eliminado con éxito");
   } catch (error) {
     console.log(error);
     return respuestaError(res, "Error interno del servidor");
