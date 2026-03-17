@@ -67,6 +67,19 @@ const crearCategoria = async (datos: CategoriaDTO) => {
 const editarCategoria = async (id: number, datos: CategoriaDTO) => {
   const { nombre, descripcion } = datos;
 
+  const { rowCount: filasEncontradas } = await db.query(
+    `
+    SELECT id
+    FROM categorias
+    WHERE activo = $1 AND nombre = $2 AND id <> $3
+    `,
+    [true, nombre, id],
+  );
+
+  if (filasEncontradas && filasEncontradas > 0) {
+    throw Error("Ya existe esa categoría");
+  }
+
   const { rowCount: filasAfectadas } = await db.query(
     `UPDATE categorias SET nombre = $1, descripcion = $2 WHERE id = $3`,
     [nombre, descripcion, id],
