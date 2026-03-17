@@ -20,25 +20,19 @@ const eresAdmin = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res
-      .status(401)
-      .json(respuestaError("Token de administrador requerido", null));
+    return respuestaError(res, "Token de administrador requerido", 401);
   }
 
   try {
     const datos = jwt.verify(token, SECRETO_JWT) as Token;
 
     if (!datos.es_admin) {
-      return res
-        .status(401)
-        .json(respuestaError("No eres administrador, ¿Quien eres?", null));
+      return respuestaError(res, "No eres administrador, ¿Quien eres?", 403);
     }
 
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json(respuestaError("Token invalido o expirado", null));
+    return respuestaError(res, "Token invalido o expirado", 498);
   }
 };
 
@@ -47,9 +41,7 @@ const eresEl = (req: Request, res: Response, next: NextFunction) => {
   const id = req.body.id;
 
   if (!token) {
-    return res
-      .status(401)
-      .json(respuestaError("Token de usuario requerido", null));
+    return respuestaError(res, "Token de usuario requerido", 498);
   }
 
   try {
@@ -60,16 +52,12 @@ const eresEl = (req: Request, res: Response, next: NextFunction) => {
     }
 
     if (datos.id !== id) {
-      return res
-        .status(401)
-        .json(respuestaError("No eres ESE cliente, ¿Quien eres?", null));
+      return respuestaError(res, "No eres ESE cliente, ¿Quien eres?", 401);
     }
 
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json(respuestaError("Token invalido o expirado", null));
+    return respuestaError(res, "Token invalido o expirado", 498);
   }
 };
 
