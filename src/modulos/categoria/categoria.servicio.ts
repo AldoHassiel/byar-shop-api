@@ -64,6 +64,21 @@ const crearCategoria = async (datos: CategoriaDTO) => {
   return;
 };
 
+const editarCategoria = async (id: number, datos: CategoriaDTO) => {
+  const { nombre, descripcion } = datos;
+
+  const { rowCount: filasAfectadas } = await db.query(
+    `UPDATE categorias SET nombre = $1, descripcion = $2 WHERE id = $3`,
+    [nombre, descripcion, id],
+  );
+
+  if (!filasAfectadas) {
+    throw Error("Algo pasó en la base de datos");
+  }
+
+  return;
+};
+
 const eliminarCategoria = async (id: number) => {
   const { rowCount: filasAfectadas } = await db.query(
     "UPDATE categorias SET activo = $1 WHERE id = $2",
@@ -81,5 +96,6 @@ export const ServicioCategorias = {
   obtenerCategorias,
   obtenerCategoria,
   crearCategoria,
+  editarCategoria,
   eliminarCategoria,
 };

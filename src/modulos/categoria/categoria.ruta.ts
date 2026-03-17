@@ -22,6 +22,12 @@ enrutador.post(
   ControladorCategoria.crearCategoria,
 );
 
+enrutador.put(
+  "/categorias/:id",
+  Middle.eresAdmin,
+  ControladorCategoria.editarCategoria,
+);
+
 enrutador.delete(
   "/categorias/:id",
   Middle.eresAdmin,

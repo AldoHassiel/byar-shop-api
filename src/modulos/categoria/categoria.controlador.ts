@@ -57,6 +57,29 @@ const crearCategoria = async (req: Request, res: Response) => {
   }
 };
 
+const editarCategoria = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const categoria = esquemaCategoria.safeParse(req.body);
+
+  if (!categoria.success) {
+    return respuestaErrorValidacion(res, categoria.error);
+  }
+
+  try {
+    await ServicioCategorias.editarCategoria(Number(id), categoria.data);
+    return respuestaOk(res, "Categoria editada con éxito");
+  } catch (error) {
+    const mensaje = (error as Error).message;
+    console.log(error);
+
+    if (mensaje === "Ya existe una categoría con ese nombre") {
+      return respuestaError(res, mensaje, 409);
+    }
+
+    return respuestaError(res, "Error interno del servidor");
+  }
+};
+
 const eliminarCategoria = async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -73,5 +96,6 @@ export const ControladorCategoria = {
   obtenerCategorias,
   obtenerCategoria,
   crearCategoria,
+  editarCategoria,
   eliminarCategoria,
 };
