@@ -5,6 +5,7 @@ import rutaTest from "@/modulos/test/test.ruta.js";
 import rutaAutenticacion from "@/modulos/autenticacion/autenticacion.ruta.js";
 import rutaAdmin from "@/modulos/admin/admin.ruta.js";
 import rutaCategoria from "@/modulos/categoria/categoria.ruta.js";
+import rutaSubcategoria from "@/modulos/subcategoria/subcategoria.ruta.js";
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use(rutaTest);
 app.use(rutaAutenticacion);
 app.use(rutaAdmin);
 app.use(rutaCategoria);
+app.use(rutaSubcategoria);
 
 export default app;
