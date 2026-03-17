@@ -9,6 +9,6 @@ const enrutador = Router();
 
 enrutador.post("/auth/registrar", registrar);
 enrutador.post("/auth/iniciarSesion", iniciarSesion);
-enrutador.get("/auth/cerrarSesion", cerrarSesion);
+enrutador.post("/auth/cerrarSesion", cerrarSesion);
 
 export default enrutador;
