@@ -67,11 +67,11 @@ export const iniciarSesion = async (req: Request, res: Response) => {
     const mensaje = (error as Error).message;
 
     if (mensaje === "Correo o contraseña incorrectos") {
-      res.status(401).json({ mensaje });
+      res.status(401).json(respuestaError(mensaje, null));
       return;
     }
 
-    res.status(500).json({ mensaje: "Error interno del servidor" });
+    res.status(500).json(respuestaError("Error interno del servidor", null));
   }
 };
 

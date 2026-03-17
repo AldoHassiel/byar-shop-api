@@ -28,8 +28,8 @@ const registrar = async (datosUsuario: RegistroDTO) => {
   const { nombre, apellidos, telefono, correo, pwd } = datosUsuario;
 
   const { rows: existentes } = await db.query(
-    "SELECT id FROM usuarios WHERE correo = $1",
-    [correo],
+    "SELECT id FROM usuarios WHERE correo = $1 AND activo = $2",
+    [correo, true],
   );
 
   if (existentes.length > 0) {
