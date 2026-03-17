@@ -1,5 +1,6 @@
 import { db } from "@/config/db.js";
 import { type SubcategoriaDTO } from "./subcategoria.esquema.js";
+import { ca } from "zod/locales";
 
 const obtenerSubcategorias = async (es_admin: boolean | undefined) => {
   if (es_admin) {
@@ -50,7 +51,7 @@ const crearSubcategoria = async (datos: SubcategoriaDTO) => {
     [nombre, true],
   );
 
-  if (categoriaExiste) {
+  if (categoriaExiste && categoriaExiste > 0) {
     throw Error("Ya existe esa subcategoría");
   }
 
@@ -69,6 +70,19 @@ const crearSubcategoria = async (datos: SubcategoriaDTO) => {
 
 const editarSubcategoria = async (id: number, datos: SubcategoriaDTO) => {
   const { id_categoria, nombre, descripcion } = datos;
+
+  const { rowCount: filasEncontradas } = await db.query(
+    `
+    SELECT id
+    FROM subcategorias
+    WHERE activo = $1 AND nombre = $2 AND id <> $3
+    `,
+    [true, nombre, id],
+  );
+
+  if (filasEncontradas && filasEncontradas > 0) {
+    throw Error("Ya existe esa subcategoria");
+  }
 
   const { rowCount: filasAfectadas } = await db.query(
     `UPDATE subcategorias SET id_categoria = $1, nombre = $2, descripcion = $3 WHERE id = $4`,

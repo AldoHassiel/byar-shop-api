@@ -11,7 +11,7 @@ enrutador.put("/marcas/:id", Middle.eresAdmin, ControladorMarcas.editarMarca);
 enrutador.delete(
   "/marcas/:id",
   Middle.eresAdmin,
-  ControladorMarcas.editarMarca,
+  ControladorMarcas.eliminarMarca,
 );
 
 export default enrutador;

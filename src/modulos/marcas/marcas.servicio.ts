@@ -61,7 +61,7 @@ const crearMarca = async (datos: MarcaDTO) => {
     [true, nombre],
   );
 
-  if (!filasEncontradas) {
+  if (filasEncontradas && filasEncontradas > 0) {
     throw Error("Ya existe esa marca");
   }
 
@@ -72,6 +72,7 @@ const crearMarca = async (datos: MarcaDTO) => {
     `,
     [nombre, descripcion],
   );
+  console.log(filaAfectada);
 
   if (!filaAfectada) {
     throw Error("Algo pasó en la base de datos");
@@ -92,7 +93,7 @@ const editarMarca = async (id: number, datos: MarcaDTO) => {
     [true, nombre, id],
   );
 
-  if (!filasEncontradas) {
+  if (filasEncontradas && filasEncontradas > 0) {
     throw Error("Ya existe esa marca");
   }
 
@@ -117,7 +118,7 @@ const eliminarMarca = async (id: number) => {
   const { rowCount: filaAfectada } = await db.query(
     `
     UPDATE marcas SET
-      activo = $1,
+      activo = $1
     WHERE id = $2
     `,
     [false, id],
