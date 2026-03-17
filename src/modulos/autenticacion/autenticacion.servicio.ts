@@ -28,28 +28,12 @@ const registrar = async (datosUsuario: RegistroDTO) => {
   const { nombre, apellidos, telefono, correo, pwd } = datosUsuario;
 
   const { rows: existentes } = await db.query(
-    "SELECT id, pwd FROM usuarios WHERE correo = $1",
+    "SELECT id FROM usuarios WHERE correo = $1",
     [correo],
   );
 
   if (existentes.length > 0) {
-    const esPwdValido = await bcrypt.compare(pwd, existentes[0].pwd);
-
-    if (!esPwdValido) {
-      throw new Error("El correo ya está registrado");
-    }
-
-    const { rows } = await db.query(
-      `
-      UPDATE usuarios SET activo = $1 WHERE id = $2
-      RETURNING id, nombre, apellidos, telefono, correo, es_admin`,
-      [true, existentes[0].id],
-    );
-
-    const usuario = rows[0];
-    const token = generarToken(usuario);
-
-    return { token, usuario };
+    throw new Error("El correo ya está registrado");
   }
 
   const sal = await bcrypt.genSalt(SAL);

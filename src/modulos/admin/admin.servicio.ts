@@ -12,22 +12,7 @@ const crearAdmin = async (datos: RegistroDTO) => {
   );
 
   if (existentes.length > 0) {
-    const esPwdValido = await bcrypt.compare(pwd, existentes[0].pwd);
-
-    if (!esPwdValido) {
-      throw new Error("El correo ya está registrado");
-    }
-
-    const { rows } = await db.query(
-      `
-      UPDATE usuarios SET activo = $1 WHERE id = $2
-      RETURNING id, nombre, apellidos, telefono, correo, es_admin`,
-      [true, existentes[0].id],
-    );
-
-    const admin = rows[0];
-
-    return admin;
+    throw new Error("El correo ya está registrado");
   }
 
   const sal = await bcrypt.genSalt(SAL);
