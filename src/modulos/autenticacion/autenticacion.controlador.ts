@@ -4,7 +4,11 @@ import {
   esquemaInicioSesion,
 } from "./autenticacion.esquema.js";
 import { ServicioAutenticacion } from "./autenticacion.servicio.js";
-import { respuestaError, respuestaOk } from "@/utilidades/respuesta.js";
+import {
+  respuestaError,
+  respuestaErrorValidacion,
+  respuestaOk,
+} from "@/utilidades/respuesta.js";
 
 const opcionesCookie = {
   httpOnly: true,
@@ -17,13 +21,7 @@ export const registrar = async (req: Request, res: Response) => {
   const usuario = esquemaRegistro.safeParse(req.body);
 
   if (!usuario.success) {
-    const errores = usuario.error.issues.map((e) => ({
-      campo: e.path.join("."),
-      mensaje: e.message,
-    }));
-
-    res.status(400).json(respuestaError("Error de validaciones", errores));
-    return;
+    return respuestaErrorValidacion(res, usuario.error);
   }
 
   try {
@@ -31,16 +29,16 @@ export const registrar = async (req: Request, res: Response) => {
 
     res.cookie("token", respuesta.token, opcionesCookie);
 
-    res.status(201).json(respuestaOk("Todo bien", respuesta.usuario));
+    return respuestaOk(res, "Todo bien", respuesta.usuario, 201);
   } catch (error) {
     const mensaje = (error as Error).message;
 
     if (mensaje === "El correo ya está registrado") {
-      res.status(409).json(respuestaError(mensaje, null));
+      respuestaError(res, mensaje, 409);
       return;
     }
 
-    res.status(500).json(respuestaError("Error interno del servidor", null));
+    respuestaError(res, "Error interno del servidor", 500);
   }
 };
 
@@ -48,13 +46,7 @@ export const iniciarSesion = async (req: Request, res: Response) => {
   const usuario = esquemaInicioSesion.safeParse(req.body);
 
   if (!usuario.success) {
-    const errores = usuario.error.issues.map((e) => ({
-      campo: e.path.join("."),
-      mensaje: e.message,
-    }));
-
-    res.status(400).json(respuestaError("Error de validaciones", errores));
-    return;
+    return respuestaErrorValidacion(res, usuario.error);
   }
 
   try {
@@ -62,20 +54,24 @@ export const iniciarSesion = async (req: Request, res: Response) => {
 
     res.cookie("token", respuesta.token, opcionesCookie);
 
-    res.status(200).json(respuestaOk("Todo bien", respuesta.usuario));
+    return respuestaOk(
+      res,
+      "Iniciado sesión éxitosamente",
+      respuesta.usuario,
+      200,
+    );
   } catch (error) {
     const mensaje = (error as Error).message;
 
     if (mensaje === "Correo o contraseña incorrectos") {
-      res.status(401).json(respuestaError(mensaje, null));
-      return;
+      return respuestaError(res, mensaje, 401);
     }
 
-    res.status(500).json(respuestaError("Error interno del servidor", null));
+    return respuestaError(res, "Error interno del servidor", 500);
   }
 };
 
 export const cerrarSesion = async (_req: Request, res: Response) => {
   res.clearCookie("token", opcionesCookie);
-  res.json(respuestaOk("Sesión cerrada correctamente", null));
+  respuestaOk(res, "Sesión cerrada correctamente", 200);
 };
