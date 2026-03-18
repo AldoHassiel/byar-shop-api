@@ -9,6 +9,7 @@ import rutaSubcategoria from "@/modulos/subcategoria/subcategoria.ruta.js";
 import rutaMarcas from "@/modulos/marcas/marcas.ruta.js";
 import rutasProductos from "./modulos/productos/productos.ruta.js";
 import rutasCP from "./modulos/cp/cp.ruta.js";
+import rutasEstadosPedidos from "./modulos/estadosPedidos/estados.ruta.js";
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use(rutaSubcategoria);
 app.use(rutaMarcas);
 app.use(rutasProductos);
 app.use(rutasCP);
+app.use(rutasEstadosPedidos);
 
 export default app;
