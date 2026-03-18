@@ -23,6 +23,14 @@ const obtenerMarca = async (req: Request, res: Response) => {
   const es_admin = req.usuario?.es_admin;
   const { id } = req.params;
 
+  if (!id) {
+    return respuestaError(res, "Falta el id", 400);
+  }
+
+  if (isNaN(Number(id))) {
+    return respuestaError(res, "El id debe de ser un número", 400);
+  }
+
   try {
     const marcas = await ServicioMarcas.obtenerMarca(Number(id), es_admin);
     return respuestaOk(res, "Marca obtenida con éxito", marcas);
@@ -62,6 +70,14 @@ const editarMarca = async (req: Request, res: Response) => {
     return respuestaErrorValidacion(res, marca.error);
   }
 
+  if (!id) {
+    return respuestaError(res, "Falta el id", 400);
+  }
+
+  if (isNaN(Number(id))) {
+    return respuestaError(res, "El id debe de ser un número", 400);
+  }
+
   try {
     await ServicioMarcas.editarMarca(Number(id), marca.data);
     return respuestaOk(res, "Marca editada con éxito");
@@ -79,6 +95,14 @@ const editarMarca = async (req: Request, res: Response) => {
 
 const eliminarMarca = async (req: Request, res: Response) => {
   const { id } = req.params;
+
+  if (!id) {
+    return respuestaError(res, "Falta el id", 400);
+  }
+
+  if (isNaN(Number(id))) {
+    return respuestaError(res, "El id debe de ser un número", 400);
+  }
 
   try {
     await ServicioMarcas.eliminarMarca(Number(id));

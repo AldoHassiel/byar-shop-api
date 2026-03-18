@@ -21,6 +21,20 @@ export const respuestaOk = <T>(
   return res.status(codigo).json(respuesta);
 };
 
+export const respuestaAPI = <T>(
+  res: Response,
+  mensaje: string,
+  campos: T | null = null,
+  codigo: number = 200,
+): Response => {
+  const respuesta = {
+    estado: true,
+    mensaje,
+    ...campos,
+  };
+  return res.status(codigo).json(respuesta);
+};
+
 export const respuestaError = (
   res: Response,
   mensaje: string,
