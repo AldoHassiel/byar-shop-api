@@ -24,13 +24,18 @@ const obtenerProductos = async (req: Request, res: Response) => {
 
   try {
     const productos = await ServicioProductos.obtenerProductos(parametros.data);
+
     const total =
       productos.length > 0 ? parseInt(productos[0].total_registros) : 0;
     const total_paginas = Math.ceil(total / parametros.data.limite);
 
+    const productosLimpiados = productos.map(
+      ({ total_registros, ...resto }) => resto,
+    );
+
     return respuestaAPI(res, "Productos obtenidos con éxito", {
       total_paginas,
-      productos,
+      productos: productosLimpiados,
     });
   } catch (error) {
     console.log(error);
