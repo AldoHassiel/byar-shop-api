@@ -1,0 +1,28 @@
+type: http_request
+model: http_request
+id: rq_QkdpxjojEp
+createdAt: 2026-03-17T04:31:37.015552100
+updatedAt: 2026-03-17T04:32:14.548770800
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_LUDTfqY5Hp
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "id_categoria": 3,
+      "nombre": "Delineador",
+      "descripcion": "Pa que las cejas queden bonitas"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: IBkfUQT7tR
+method: PUT
+name: EditarSubcategoria
+sortPriority: 1000.003
+url: http://localhost:8500/subcategorias/1
+urlParameters: []

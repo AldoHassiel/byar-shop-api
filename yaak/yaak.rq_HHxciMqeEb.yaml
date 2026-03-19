@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_HHxciMqeEb
+createdAt: 2026-03-17T07:39:07.601381500
+updatedAt: 2026-03-17T16:38:16.408931100
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_pLC7oambmW
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "nombre": "Elf",
+      "descripcion": ""
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: FPc5hhjr0z
+method: POST
+name: CrearMarca
+sortPriority: 2000.0
+url: http://localhost:8500/marcas
+urlParameters: []

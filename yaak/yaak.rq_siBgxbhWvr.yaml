@@ -1,0 +1,23 @@
+type: http_request
+model: http_request
+id: rq_siBgxbhWvr
+createdAt: 2026-03-18T15:19:51.914740100
+updatedAt: 2026-03-18T15:20:56.146155600
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_D5mdUfK8LX
+authentication: {}
+authenticationType: null
+body:
+  text: ''
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: IfKpvm0QIn
+method: DELETE
+name: EliminarProducto
+sortPriority: 0.004
+url: http://localhost:8500/productos/22
+urlParameters: []

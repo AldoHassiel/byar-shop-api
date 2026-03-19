@@ -1,0 +1,19 @@
+type: http_request
+model: http_request
+id: rq_avqSdjxmBZ
+createdAt: 2026-03-17T04:32:48.229255700
+updatedAt: 2026-03-17T04:33:10.893156200
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_LUDTfqY5Hp
+authentication: {}
+authenticationType: null
+body:
+  text: ''
+bodyType: null
+description: ''
+headers: []
+method: DELETE
+name: EliminarSubcategoria
+sortPriority: 1000.004
+url: http://localhost:8500/subcategorias/1
+urlParameters: []

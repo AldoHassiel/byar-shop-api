@@ -1,0 +1,32 @@
+type: http_request
+model: http_request
+id: rq_Eh3rPxZRKi
+createdAt: 2026-03-18T15:07:50.692245400
+updatedAt: 2026-03-18T15:08:53.043374
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_D5mdUfK8LX
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "imagen_url": "",
+      "nombre": "Producto creado por la API",
+      "descripcion": "Descripcion editada",
+      "precio": 10,
+      "stock": 5,
+      "id_subcategoria": 3,
+      "id_marca": 3
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: IfKpvm0QIn
+method: PUT
+name: EditarProducto
+sortPriority: 0.003
+url: http://localhost:8500/productos/22
+urlParameters: []

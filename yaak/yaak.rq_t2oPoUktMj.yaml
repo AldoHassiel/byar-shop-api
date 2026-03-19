@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_t2oPoUktMj
+createdAt: 2026-03-17T04:26:46.748086200
+updatedAt: 2026-03-17T04:30:14.468555100
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_LUDTfqY5Hp
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "id_categoria": 3,
+      "nombre": "Delineador",
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: IBkfUQT7tR
+method: POST
+name: CrearSubcategoria
+sortPriority: 1000.002
+url: http://localhost:8500/subcategorias/
+urlParameters: []

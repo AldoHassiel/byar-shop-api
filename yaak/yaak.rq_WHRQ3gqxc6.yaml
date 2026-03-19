@@ -1,0 +1,23 @@
+type: http_request
+model: http_request
+id: rq_WHRQ3gqxc6
+createdAt: 2026-03-19T03:00:38.698597300
+updatedAt: 2026-03-19T03:22:59.041703700
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_pguBp4UCor
+authentication: {}
+authenticationType: null
+body:
+  text: ''
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: 6p5c6sjmfv
+method: DELETE
+name: EliminarDireccion
+sortPriority: 0.005
+url: http://localhost:8500/usuario/2/direcciones/3
+urlParameters: []

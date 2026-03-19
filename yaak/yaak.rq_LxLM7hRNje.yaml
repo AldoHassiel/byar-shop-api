@@ -1,0 +1,34 @@
+type: http_request
+model: http_request
+id: rq_LxLM7hRNje
+createdAt: 2026-03-19T02:32:55.039187400
+updatedAt: 2026-03-19T02:57:14.451163600
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_pguBp4UCor
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "calle": "Av. Reforma Editada",
+      "numero_exterior": "1500",
+      "numero_interior": "3C",
+      "colonia": "Centro",
+      "ciudad": "Guadalajara",
+      "municipio": "Guadalajara",
+      "estado": "Jalisco",
+      "codigo_postal": "44100",
+      "especificaciones": "Edificio con portón eléctrico, departamento en tercer piso",
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: 6p5c6sjmfv
+method: POST
+name: EditarDireccion
+sortPriority: 0.003
+url: http://localhost:8500/usuario/2/direcciones/6
+urlParameters: []

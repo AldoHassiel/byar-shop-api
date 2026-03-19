@@ -1,0 +1,29 @@
+type: http_request
+model: http_request
+id: rq_og9LRKHbdb
+createdAt: 2026-03-14T22:19:07.177286700
+updatedAt: 2026-03-18T18:33:19.998905300
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_RCXV2eYm7A
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "nombre": "David",
+      "apellidos": "Valenzuela",
+      "correo": "Davidvzla@gmail.com",
+      "pwd": "Davidvzla"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: unIHAY520U
+method: POST
+name: RegistrarCliente
+sortPriority: 0.0
+url: http://localhost:8500/auth/registrar
+urlParameters: []

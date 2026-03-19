@@ -1,0 +1,32 @@
+type: http_request
+model: http_request
+id: rq_knYGFb4XS9
+createdAt: 2026-03-18T14:56:21.711813500
+updatedAt: 2026-03-18T15:04:04.725280700
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_D5mdUfK8LX
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "imagen_url": "",
+      "nombre": "Producto creado por la API",
+      "descripcion": "Descripcion desde la API",
+      "precio": 5,
+      "stock": 1,
+      "id_subcategoria": 3,
+      "id_marca": 3
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: IfKpvm0QIn
+method: POST
+name: CrearProducto
+sortPriority: 0.002
+url: http://localhost:8500/productos/
+urlParameters: []

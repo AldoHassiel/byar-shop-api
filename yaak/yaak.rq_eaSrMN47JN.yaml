@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_eaSrMN47JN
+createdAt: 2026-03-15T03:59:30.167357500
+updatedAt: 2026-03-17T00:43:22.753105100
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_RCXV2eYm7A
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "correo": "jose.perez@gmail.com",
+      "pwd": "JosePerez"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: unIHAY520U
+method: POST
+name: IniciarSesion
+sortPriority: 1000.0
+url: http://localhost:8500/auth/iniciarSesion
+urlParameters: []

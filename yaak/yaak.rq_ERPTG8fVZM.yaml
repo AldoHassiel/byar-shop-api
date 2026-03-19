@@ -1,0 +1,23 @@
+type: http_request
+model: http_request
+id: rq_ERPTG8fVZM
+createdAt: 2026-03-19T02:58:12.546384700
+updatedAt: 2026-03-19T03:22:28.414488100
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_pguBp4UCor
+authentication: {}
+authenticationType: null
+body:
+  text: ''
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: 6p5c6sjmfv
+method: PATCH
+name: PretederminadaDireccion
+sortPriority: 0.004
+url: http://localhost:8500/usuario/2/direcciones/5/predeterminada
+urlParameters: []

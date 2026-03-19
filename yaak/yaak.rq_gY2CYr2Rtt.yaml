@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_gY2CYr2Rtt
+createdAt: 2026-03-17T03:26:44.393518100
+updatedAt: 2026-03-17T16:39:01.728021100
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_sqsG232KyT
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "nombre": "Categoria",
+      "descripcion": ""
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: EDQtKB93I4
+method: POST
+name: CrearCategoria
+sortPriority: 2000.0
+url: http://localhost:8500/categorias
+urlParameters: []

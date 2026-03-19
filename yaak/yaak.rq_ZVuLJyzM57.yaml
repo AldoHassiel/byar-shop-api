@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_ZVuLJyzM57
+createdAt: 2026-03-17T07:39:41.285201400
+updatedAt: 2026-03-17T17:05:29.100652500
+workspaceId: wk_nWQrWLkvmi
+folderId: fl_pLC7oambmW
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "nombre": "Elf",
+      "descripcion": "Una marca"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: FPc5hhjr0z
+method: PUT
+name: EditarMarca
+sortPriority: 2000.001
+url: http://localhost:8500/marcas/2
+urlParameters: []
