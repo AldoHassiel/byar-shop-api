@@ -18,7 +18,7 @@ export const obtenerProductos = async (filtros: FiltrosProductoDTO) => {
     ],
   );
 
-  return consulta.rows.map(({ total_registros, ...resto }) => resto);
+  return consulta.rows;
 };
 
 export const obtenerProducto = async (id: number) => {
