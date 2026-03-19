@@ -10,6 +10,7 @@ import rutaMarcas from "@/modulos/marcas/marcas.ruta.js";
 import rutasProductos from "./modulos/productos/productos.ruta.js";
 import rutasCP from "./modulos/cp/cp.ruta.js";
 import rutasEstadosPedidos from "./modulos/estadosPedidos/estados.ruta.js";
+import rutasDirecciones from "./modulos/usuario/direcciones/direcciones.ruta.js";
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.use(rutaMarcas);
 app.use(rutasProductos);
 app.use(rutasCP);
 app.use(rutasEstadosPedidos);
+app.use(rutasDirecciones);
 
 export default app;
