@@ -29,7 +29,7 @@ rutasMetodosPago.put(
 );
 
 rutasMetodosPago.delete(
-  "/usuario/:usuarioId/metodosPago",
+  "/usuario/:usuarioId/metodosPago/:id",
   Middle.eresEseUsuario,
   ControladorMetodos.eliminarMetodo,
 );

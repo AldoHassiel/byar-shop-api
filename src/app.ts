@@ -1,5 +1,11 @@
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+import { z } from "zod";
+
+extendZodWithOpenApi(z);
+
 import express from "express";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
 
 import rutaTest from "@/modulos/test/test.ruta.js";
 import rutaAutenticacion from "@/modulos/autenticacion/autenticacion.ruta.js";
@@ -12,6 +18,27 @@ import rutasCP from "./modulos/cp/cp.ruta.js";
 import rutasEstadosPedidos from "./modulos/estadosPedidos/estados.ruta.js";
 import rutasDirecciones from "./modulos/usuario/direcciones/direcciones.ruta.js";
 import rutasMetodosPago from "./modulos/usuario/metodosDePago/metodosPago.ruta.js";
+
+import "@/modulos/productos/productos.docs.js";
+import "@/modulos/autenticacion/autenticacion.docs.js";
+import "@/modulos/admin/admin.docs.js";
+import "@/modulos/categoria/categoria.docs.js";
+import "@/modulos/marcas/marcas.docs.js";
+import "@/modulos/subcategoria/subcategoria.docs.js";
+import "@/modulos/usuario/direcciones/direcciones.docs.js";
+import "@/modulos/usuario/metodosDePago/metodosPago.docs.js";
+import "@/modulos/cp/cp.docs.js";
+import "@/modulos/estadosPedidos/estados.docs.js";
+
+import { registro } from "./config/openAPI/openAPI.registro.js";
+import { generarDocumentacion } from "./config/openAPI/openAPI.config.js";
+
+registro.registerComponent("securitySchemes", "autenticacionBearer", {
+  type: "http",
+  scheme: "bearer",
+  bearerFormat: "JWT",
+  description: "Token JWT obtenido al iniciar sesión",
+});
 
 const app = express();
 
@@ -29,5 +56,8 @@ app.use(rutasCP);
 app.use(rutasEstadosPedidos);
 app.use(rutasDirecciones);
 app.use(rutasMetodosPago);
+
+const especificacion = generarDocumentacion();
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(especificacion));
 
 export default app;
