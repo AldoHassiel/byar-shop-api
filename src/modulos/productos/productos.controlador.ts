@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import {
   esquemaFiltrosProducto,
   esquemaProducto,
+  esquemaProductoEditado,
 } from "./productos.esquema.js";
 import { ServicioProductos } from "./productos.servicio.js";
 import {
@@ -10,6 +11,7 @@ import {
   respuestaErrorValidacion,
   respuestaOk,
 } from "@/utilidades/respuesta.js";
+import { subirImagen } from "@/supabase/supabase.js";
 
 const obtenerProductos = async (req: Request, res: Response) => {
   const parametros = esquemaFiltrosProducto.safeParse(req.query);
@@ -71,7 +73,15 @@ const crearProducto = async (req: Request, res: Response) => {
   }
 
   try {
-    await ServicioProductos.crearProducto(producto.data);
+    let imagenUrl: string = "";
+    if (req.file) {
+      imagenUrl = await subirImagen(req.file);
+    }
+
+    await ServicioProductos.crearProducto({
+      ...producto.data,
+      imagen_url: imagenUrl,
+    });
     return respuestaOk(res, "Producto creado con éxito");
   } catch (error) {
     const mensaje = (error as Error).message;
@@ -86,23 +96,33 @@ const crearProducto = async (req: Request, res: Response) => {
 };
 
 const editarProducto = async (req: Request, res: Response) => {
-  const producto = esquemaProducto.safeParse(req.body);
+  const producto = esquemaProductoEditado.safeParse(req.body);
   const { id } = req.params;
 
   if (!producto.success) {
     return respuestaErrorValidacion(res, producto.error);
   }
 
-  if (!id) {
-    return respuestaError(res, "Falta el id", 400);
+  if (!id || isNaN(Number(id))) {
+    return respuestaError(res, "El id debe ser un número válido", 400);
   }
 
-  if (isNaN(Number(id))) {
-    return respuestaError(res, "El id debe de ser un número", 400);
+  if (producto.data.accion_imagen === "nueva" && !req.file) {
+    return respuestaError(res, "Se esperaba un archivo de imagen", 400);
   }
 
   try {
-    await ServicioProductos.editarProducto(Number(id), producto.data);
+    let imagenUrl: string | undefined = undefined;
+
+    if (producto.data.accion_imagen === "nueva" && req.file) {
+      imagenUrl = await subirImagen(req.file);
+    }
+
+    await ServicioProductos.editarProducto(Number(id), {
+      ...producto.data,
+      imagen_url: imagenUrl,
+    });
+
     return respuestaOk(res, "Producto editado con éxito");
   } catch (error) {
     const mensaje = (error as Error).message;

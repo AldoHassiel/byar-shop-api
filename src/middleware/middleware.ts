@@ -3,6 +3,7 @@ import { respuestaError } from "@/utilidades/respuesta.js";
 import type { Token } from "@/utilidades/token.js";
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import multer from "multer";
 
 const leerToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
@@ -70,8 +71,27 @@ const eresAdmin = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const subirArchivos = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, //5MB, no hay espacio :C
+  fileFilter: (_req, file, cb) => {
+    const tiposPermitidos = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+    ];
+    if (tiposPermitidos.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Solo se permiten imágenes JPG, PNG o WEBP"));
+    }
+  },
+});
+
 export const Middle = {
   eresAdmin,
   eresEseUsuario,
   leerToken,
+  subirArchivos,
 };

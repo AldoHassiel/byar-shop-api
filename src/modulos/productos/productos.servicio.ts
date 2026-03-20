@@ -1,5 +1,10 @@
 import { db } from "@/config/db.js";
-import type { FiltrosProductoDTO, ProductoDTO } from "./productos.esquema.js";
+import type {
+  FiltrosProductoDTO,
+  ProductoDTO,
+  ProductoEditadoDTO,
+} from "./productos.esquema.js";
+import { eliminarImagen } from "@/supabase/supabase.js";
 
 export const obtenerProductos = async (filtros: FiltrosProductoDTO) => {
   const consulta = await db.query(
@@ -52,7 +57,7 @@ export const crearProducto = async (datos: ProductoDTO) => {
     VALUES ($1, $2, $3, $4, $5, $6, $7)
     `,
     [
-      datos.imagen_url || null,
+      datos.imagen_url,
       datos.nombre,
       datos.descripcion,
       datos.precio,
@@ -70,7 +75,7 @@ export const crearProducto = async (datos: ProductoDTO) => {
   return;
 };
 
-export const editarProducto = async (id: number, datos: ProductoDTO) => {
+export const editarProducto = async (id: number, datos: ProductoEditadoDTO) => {
   const { rowCount: filasEncontradas } = await db.query(
     `
     SELECT id
@@ -79,27 +84,47 @@ export const editarProducto = async (id: number, datos: ProductoDTO) => {
     `,
     [true, datos.nombre, id],
   );
-  console.log(filasEncontradas);
 
   if (filasEncontradas && filasEncontradas > 0) {
     throw Error("Ya existe ese producto");
   }
 
+  if (datos.accion_imagen === "nueva" || datos.accion_imagen === "eliminar") {
+    const { rows } = await db.query(
+      `SELECT imagen_url FROM productos WHERE id = $1`,
+      [id],
+    );
+
+    const imagenUrlActual: string | null = rows[0]?.imagen_url ?? null;
+
+    if (imagenUrlActual) {
+      try {
+        await eliminarImagen(imagenUrlActual);
+      } catch (errorStorage) {
+        console.error("No se pudo eliminar la imagen anterior:", errorStorage);
+      }
+    }
+  }
+
   const { rowCount: filaAfectada } = await db.query(
     `
     UPDATE productos SET
-      imagen_url = $1,
-      nombre = $2,
-      descripcion = $3,
-      precio = $4,
-      stock = $5,
-      id_subcategoria = $6,
-      id_marca = $7
-    WHERE
-      id = $8
+      imagen_url      = CASE
+                          WHEN $1 = 'conservar' THEN imagen_url
+                          WHEN $1 = 'nueva'     THEN $2
+                          WHEN $1 = 'eliminar'  THEN NULL
+                        END,
+      nombre          = $3,
+      descripcion     = $4,
+      precio          = $5,
+      stock           = $6,
+      id_subcategoria = $7,
+      id_marca        = $8
+    WHERE id = $9
     `,
     [
-      datos.imagen_url || null,
+      datos.accion_imagen,
+      datos.imagen_url ?? null,
       datos.nombre,
       datos.descripcion,
       datos.precio,
@@ -109,7 +134,6 @@ export const editarProducto = async (id: number, datos: ProductoDTO) => {
       id,
     ],
   );
-  console.log(filaAfectada);
 
   if (!filaAfectada) {
     throw Error("Algo pasó en la base de datos");
@@ -119,6 +143,21 @@ export const editarProducto = async (id: number, datos: ProductoDTO) => {
 };
 
 export const eliminarProducto = async (id: number) => {
+  const { rows } = await db.query(
+    `
+    SELECT imagen_url
+    FROM productos
+    WHERE id = $1
+    `,
+    [id],
+  );
+
+  if (!rows.length) {
+    throw Error("Producto no encontrado");
+  }
+
+  const imagenUrl: string | null = rows[0]?.imagen_url ?? null;
+
   const { rowCount: filaAfectada } = await db.query(
     `
     UPDATE productos SET
@@ -130,6 +169,14 @@ export const eliminarProducto = async (id: number) => {
 
   if (!filaAfectada) {
     throw Error("Algo pasó en la base de datos");
+  }
+
+  if (imagenUrl) {
+    try {
+      await eliminarImagen(imagenUrl);
+    } catch (errorStorage) {
+      console.error("No se pudo eliminar la imagen del storage:", errorStorage);
+    }
   }
 
   return;

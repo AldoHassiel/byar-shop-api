@@ -3,11 +3,22 @@ import z from "zod";
 export const esquemaProducto = z.object({
   nombre: z.string(),
   descripcion: z.string().optional(),
-  precio: z.number(),
-  stock: z.number(),
+  precio: z.coerce.number(),
+  stock: z.coerce.number(),
   imagen_url: z.string().optional(),
-  id_subcategoria: z.number(),
-  id_marca: z.number(),
+  id_subcategoria: z.coerce.number(),
+  id_marca: z.coerce.number(),
+});
+
+export const esquemaProductoEditado = z.object({
+  nombre: z.string(),
+  descripcion: z.string().optional(),
+  precio: z.coerce.number(),
+  stock: z.coerce.number(),
+  imagen_url: z.string().optional(),
+  id_subcategoria: z.coerce.number(),
+  id_marca: z.coerce.number(),
+  accion_imagen: z.enum(["conservar", "nueva", "eliminar"]),
 });
 
 export const esquemaFiltrosProducto = z.object({
@@ -22,4 +33,5 @@ export const esquemaFiltrosProducto = z.object({
 });
 
 export type ProductoDTO = z.infer<typeof esquemaProducto>;
+export type ProductoEditadoDTO = z.infer<typeof esquemaProductoEditado>;
 export type FiltrosProductoDTO = z.infer<typeof esquemaFiltrosProducto>;

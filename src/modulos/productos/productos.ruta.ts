@@ -9,11 +9,13 @@ rutasProductos.get("/productos/:id", ControladorProductos.obtenerProducto);
 rutasProductos.post(
   "/productos",
   Middle.eresAdmin,
+  Middle.subirArchivos.single("imagen"),
   ControladorProductos.crearProducto,
 );
 rutasProductos.put(
   "/productos/:id",
   Middle.eresAdmin,
+  Middle.subirArchivos.single("imagen"),
   ControladorProductos.editarProducto,
 );
 rutasProductos.delete(

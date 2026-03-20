@@ -17,11 +17,8 @@ RETURNS TABLE(
 	descripcion VARCHAR(255),
 	precio NUMERIC(10,2),
 	stock INT,
-	id_categoria INT,
 	nombre_categoria VARCHAR(100),
-	id_subcategoria INT,
 	nombre_subcategoria VARCHAR(100),
-	id_marca INT,
 	nombre_marca VARCHAR(100),
 	total_registros BIGINT
 )
@@ -36,11 +33,8 @@ BEGIN
 		p.descripcion,
 		p.precio,
 		p.stock,
-		c.id AS id_categoria,
 		c.nombre AS nombre_categoria,
-		s.id AS id_subcategoria,
 		s.nombre AS nombre_subcategoria,
-		m.id AS id_marca,
 		m.nombre AS nombre_marca,
 		COUNT(*) OVER() AS total_registros
 	FROM productos p
@@ -80,8 +74,11 @@ RETURNS TABLE(
 	descripcion VARCHAR(255),
 	precio NUMERIC(10,2),
 	stock INT,
+	id_categoria INT,
 	nombre_categoria VARCHAR(100),
+	id_subcategoria INT,
 	nombre_subcategoria VARCHAR(100),
+	id_marca INT,
 	nombre_marca VARCHAR(100)
 )
 AS $$
@@ -95,8 +92,11 @@ BEGIN
 		p.descripcion,
 		p.precio,
 		p.stock,
+		c.id AS id_categoria,
 		c.nombre AS nombre_categoria,
+		s.id AS id_subcategoria,
 		s.nombre AS nombre_subcategoria,
+		m.id AS id_marca,
 		m.nombre AS nombre_marca
 	FROM productos p
 	INNER JOIN subcategorias s
