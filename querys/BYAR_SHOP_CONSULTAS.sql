@@ -151,6 +151,16 @@ INSERT INTO direcciones (
 -- METODOS DE PAGOS
 SELECT * FROM metodos_de_pago;
 
+UPDATE metodos_de_pago
+SET
+	activo = TRUE
+WHERE id_usuario = 2;
+
+UPDATE metodos_de_pago
+SET
+	es_predeterminada = true
+WHERE id_usuario = 2 AND id = 1;
+
 SELECT id, nombre_titular, ultimos_digitos, mes_vencimiento, ano_vencimiento, marca, es_predeterminada
 FROM metodos_de_pago
 WHERE activo = TRUE AND id_usuario = 2 AND id = 1
