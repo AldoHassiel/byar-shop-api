@@ -22,7 +22,7 @@ rutasMetodosPago.post(
   ControladorMetodos.crearMetodo,
 );
 
-rutasMetodosPago.put(
+rutasMetodosPago.patch(
   "/usuario/:usuarioId/metodosPago/:id/predeterminada",
   Middle.eresEseUsuario,
   ControladorMetodos.establecerPredeterminada,

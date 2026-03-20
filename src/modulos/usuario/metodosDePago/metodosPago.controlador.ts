@@ -38,8 +38,8 @@ const obtenerMetodo = async (req: Request, res: Response) => {
 
   try {
     const metodos = await ServicioMetodosPagos.obtenerMetodo(
-      Number(id),
       req.usuario?.id,
+      Number(id),
     );
     return respuestaOk(res, "Método de pago obtenido con éxito", metodos);
   } catch (error) {

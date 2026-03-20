@@ -131,43 +131,38 @@ const establecerPredeterminada = async (idUsuario: number, id: number) => {
 
 const eliminarDireccion = async (idUsuario: number, id: number) => {
   const consulta = await db.query(
-    `SELECT activo FROM direcciones WHERE id_usuario = $1 AND id = $2`,
+    `SELECT es_predeterminada FROM direcciones
+     WHERE id_usuario = $1 AND id = $2 AND activo = true`,
     [idUsuario, id],
   );
 
   if (!consulta.rowCount) {
-    throw Error("No se pudo eliminar la dirección");
+    throw new Error("No se pudo eliminar la dirección");
   }
 
-  if (consulta.rows[0].activo) {
-    const consultaIndice = await db.query(
-      `
-        SELECT id FROM direcciones
-        WHERE id_usuario = $1 AND activo = $2
-        ORDER BY id ASC
-        LIMIT 1
-        `,
-      [idUsuario, true],
-    );
+  const eraPredeterminada = consulta.rows[0].es_predeterminada;
 
-    if (consultaIndice.rowCount && consultaIndice.rowCount > 0) {
-      await establecerPredeterminada(idUsuario, consultaIndice.rows[0].id);
-    }
-  }
-
-  const { rowCount: filasAfectadas } = await db.query(
-    `
-    UPDATE direcciones SET
-      activo = $1
-    WHERE id_usuario = $2 AND id = $3`,
-    [false, idUsuario, id],
+  await db.query(
+    `UPDATE direcciones SET
+       activo = false,
+       es_predeterminada = false
+     WHERE id_usuario = $1 AND id = $2`,
+    [idUsuario, id],
   );
 
-  if (!filasAfectadas) {
-    throw Error("No se pudo eliminar la dirección");
-  }
+  if (eraPredeterminada) {
+    const siguiente = await db.query(
+      `SELECT id FROM direcciones
+       WHERE id_usuario = $1 AND activo = true
+       ORDER BY id ASC
+       LIMIT 1`,
+      [idUsuario],
+    );
 
-  return;
+    if (siguiente.rowCount) {
+      await establecerPredeterminada(idUsuario, siguiente.rows[0].id);
+    }
+  }
 };
 
 export const ServicioDirecciones = {

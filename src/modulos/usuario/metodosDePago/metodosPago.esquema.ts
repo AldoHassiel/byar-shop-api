@@ -36,12 +36,6 @@ export const esquemaMetodosPago = z
       .describe(
         "Código de verificación (CVV) de la tarjeta. Generalmente 3 dígitos",
       ),
-    marca: z
-      .string()
-      .max(255)
-      .describe(
-        "Marca de la tarjeta (Visa, Mastercard, Amex, etc). Máximo 255 caracteres",
-      ),
   })
   .openapi("MetodoPago");
 

@@ -18,7 +18,7 @@ const obtenerMetodos = async (idUsuario: number) => {
 const obtenerMetodo = async (idUsuario: number, id: number) => {
   const consulta = await db.query(
     `
-    SELECT id, ultimos_digitos, marca, es_predeterminada
+    SELECT id, nombre_titular, ultimos_digitos, mes_vencimiento, ano_vencimiento, marca, es_predeterminada
    FROM metodos_de_pago
    WHERE activo = TRUE AND id_usuario = $1 AND id = $2
     `,
@@ -43,7 +43,7 @@ const crearMetodo = async (idUsuario: number, datos: MetodoPagoDTO) => {
   const consultaInsertar = await db.query(
     `
     INSERT INTO metodos_de_pago(nombre_titular, numero_tarjeta, ultimos_digitos, mes_vencimiento, ano_vencimiento, cvv, marca, es_predeterminada, id_usuario)
-    VALUES($1, $2, $3, $4, $5, $6, $7, $7, $8, $9)
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
     `,
     [
       datos.nombre_titular,
@@ -95,43 +95,38 @@ const establecerPredeterminada = async (idUsuario: number, id: number) => {
 
 const eliminarMetodo = async (idUsuario: number, id: number) => {
   const consulta = await db.query(
-    `SELECT activo FROM metodos_de_pago WHERE id_usuario = $1 AND id = $2`,
+    `SELECT es_predeterminada FROM metodos_de_pago
+     WHERE id_usuario = $1 AND id = $2 AND activo = true`,
     [idUsuario, id],
   );
 
   if (!consulta.rowCount) {
-    throw Error("No se pudo eliminar el método de pago");
+    throw new Error("No se pudo eliminar el método de pago");
   }
 
-  if (consulta.rows[0].activo) {
-    const consultaIndice = await db.query(
-      `
-        SELECT id FROM metodos_de_pago
-        WHERE id_usuario = $1 AND activo = $2
-        ORDER BY id ASC
-        LIMIT 1
-        `,
-      [idUsuario, true],
-    );
+  const eraPredeterminada = consulta.rows[0].es_predeterminada;
 
-    if (consultaIndice.rowCount && consultaIndice.rowCount > 0) {
-      await establecerPredeterminada(idUsuario, consultaIndice.rows[0].id);
-    }
-  }
-
-  const { rowCount: filasAfectadas } = await db.query(
-    `
-    UPDATE metodos_de_pago SET
-      activo = $1
-    WHERE id_usuario = $2 AND id = $3`,
-    [false, idUsuario, id],
+  await db.query(
+    `UPDATE metodos_de_pago SET
+       activo = false,
+       es_predeterminada = false
+     WHERE id_usuario = $1 AND id = $2`,
+    [idUsuario, id],
   );
 
-  if (!filasAfectadas) {
-    throw Error("No se pudo eliminar el método de pago");
-  }
+  if (eraPredeterminada) {
+    const siguiente = await db.query(
+      `SELECT id FROM metodos_de_pago
+       WHERE id_usuario = $1 AND activo = true
+       ORDER BY id ASC
+       LIMIT 1`,
+      [idUsuario],
+    );
 
-  return;
+    if (siguiente.rowCount) {
+      await establecerPredeterminada(idUsuario, siguiente.rows[0].id);
+    }
+  }
 };
 
 function detectarMarcaTarjeta(numero: string) {

@@ -13,12 +13,10 @@ registro.registerPath({
   security: [{ autenticacionBearer: [] }],
   request: {
     params: z.object({
-      usuarioId: z
-        .string()
-        .openapi({
-          description: "ID del usuario dueño de los métodos de pago",
-          example: "1",
-        }),
+      usuarioId: z.string().openapi({
+        description: "ID del usuario dueño de los métodos de pago",
+        example: "1",
+      }),
     }),
   },
   responses: {
@@ -138,11 +136,9 @@ registro.registerPath({
   request: {
     params: z.object({
       usuarioId: z.string().openapi({ description: "ID del usuario" }),
-      id: z
-        .string()
-        .openapi({
-          description: "ID del método de pago a establecer como predeterminado",
-        }),
+      id: z.string().openapi({
+        description: "ID del método de pago a establecer como predeterminado",
+      }),
     }),
   },
   responses: {

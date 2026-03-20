@@ -147,3 +147,11 @@ INSERT INTO direcciones (
     ('Calle Morelos', '101', NULL, 'Centro', 'Culiacán', 'Culiacán', 'Sinaloa', '80000', 'Casa blanca con reja negra', 4),
     ('Av. Álvaro Obregón', '202', '5', 'Las Quintas', 'Culiacán', 'Culiacán', 'Sinaloa', '80060', 'Departamento en quinto piso', 4),
     ('Calle Insurgentes', '303', 'B', 'Chapultepec', 'Mazatlán', 'Mazatlán', 'Sinaloa', '82140', 'Cerca de una tienda OXXO', 4);
+
+-- METODOS DE PAGOS
+SELECT * FROM metodos_de_pago;
+
+SELECT id, nombre_titular, ultimos_digitos, mes_vencimiento, ano_vencimiento, marca, es_predeterminada
+FROM metodos_de_pago
+WHERE activo = TRUE AND id_usuario = 2 AND id = 1
+   
