@@ -13,12 +13,10 @@ registro.registerPath({
   security: [{ autenticacionBearer: [] }],
   request: {
     params: z.object({
-      usuarioId: z
-        .string()
-        .openapi({
-          description: "ID del usuario dueño de las direcciones",
-          example: "1",
-        }),
+      usuarioId: z.string().openapi({
+        description: "ID del usuario dueño de las direcciones",
+        example: "1",
+      }),
     }),
   },
   responses: {
@@ -134,13 +132,12 @@ registro.registerPath({
   },
 });
 
-// POST /usuario/:usuarioId/direcciones/:id (Editar)
+// PUT /usuario/:usuarioId/direcciones/:id (Editar)
 registro.registerPath({
-  method: "post",
+  method: "put",
   path: "/usuario/{usuarioId}/direcciones/{id}",
   tags: [ETIQUETA],
-  summary:
-    "Editar una dirección existente del usuario (usa POST en lugar de PUT)",
+  summary: "Editar una dirección existente del usuario",
   security: [{ autenticacionBearer: [] }],
   request: {
     params: z.object({
@@ -184,11 +181,9 @@ registro.registerPath({
   request: {
     params: z.object({
       usuarioId: z.string().openapi({ description: "ID del usuario" }),
-      id: z
-        .string()
-        .openapi({
-          description: "ID de la dirección a establecer como predeterminada",
-        }),
+      id: z.string().openapi({
+        description: "ID de la dirección a establecer como predeterminada",
+      }),
     }),
   },
   responses: {

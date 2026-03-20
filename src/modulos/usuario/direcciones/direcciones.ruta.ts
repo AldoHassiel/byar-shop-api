@@ -22,7 +22,7 @@ rutasDirecciones.post(
   ControladorDirecciones.crearDireccion,
 );
 
-rutasDirecciones.post(
+rutasDirecciones.put(
   "/usuario/:usuarioId/direcciones/:id",
   Middle.eresEseUsuario,
   ControladorDirecciones.editarDireccion,
