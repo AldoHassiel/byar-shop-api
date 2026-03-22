@@ -1,11 +1,13 @@
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
+import { FRONT_URL } from "./config/global.js";
 
 extendZodWithOpenApi(z);
 
 import express from "express";
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 
 import rutaTest from "@/modulos/test/test.ruta.js";
 import rutaAutenticacion from "@/modulos/autenticacion/autenticacion.ruta.js";
@@ -41,6 +43,15 @@ registro.registerComponent("securitySchemes", "autenticacionBearer", {
 });
 
 const app = express();
+
+app.use(
+  cors({
+    origin: [FRONT_URL],
+    methods: "*",
+    allowedHeaders: "*",
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 app.use(cookieParser());
