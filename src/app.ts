@@ -20,6 +20,7 @@ import rutasCP from "./modulos/cp/cp.ruta.js";
 import rutasEstadosPedidos from "./modulos/estadosPedidos/estados.ruta.js";
 import rutasDirecciones from "./modulos/usuario/direcciones/direcciones.ruta.js";
 import rutasMetodosPago from "./modulos/usuario/metodosDePago/metodosPago.ruta.js";
+import rutasNegocio from "./modulos/negocio/negocio.ruta.js";
 
 import "@/modulos/productos/productos.docs.js";
 import "@/modulos/autenticacion/autenticacion.docs.js";
@@ -31,6 +32,7 @@ import "@/modulos/usuario/direcciones/direcciones.docs.js";
 import "@/modulos/usuario/metodosDePago/metodosPago.docs.js";
 import "@/modulos/cp/cp.docs.js";
 import "@/modulos/estadosPedidos/estados.docs.js";
+import "@/modulos/negocio/negocio.docs.js";
 
 import { registro } from "./config/openAPI/openAPI.registro.js";
 import { generarDocumentacion } from "./config/openAPI/openAPI.config.js";
@@ -67,6 +69,7 @@ app.use(rutasCP);
 app.use(rutasEstadosPedidos);
 app.use(rutasDirecciones);
 app.use(rutasMetodosPago);
+app.use(rutasNegocio);
 
 const especificacion = generarDocumentacion();
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(especificacion));
