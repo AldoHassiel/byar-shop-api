@@ -4,7 +4,7 @@ import { ControladorNegocio } from "./negocio.controlador.js";
 const rutasNegocio = Router();
 
 
-rutasNegocio.get("/negocio/:id", ControladorNegocio.obtenerNegocio);
+rutasNegocio.get("/negocio", ControladorNegocio.obtenerNegocio);
 
 
 export default rutasNegocio;

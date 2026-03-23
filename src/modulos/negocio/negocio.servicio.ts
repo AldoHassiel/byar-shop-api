@@ -1,11 +1,10 @@
 import { db } from "@/config/db.js";
 
-export const obtenerNegocio = async (id: number) => {
+export const obtenerNegocio = async () => {
     const consulta = await db.query(
         `
-    SELECT * FROM negocio WHERE id = $1
-    `,
-        [id],
+    SELECT * FROM negocio
+    `
     );
 
     return consulta.rows;
