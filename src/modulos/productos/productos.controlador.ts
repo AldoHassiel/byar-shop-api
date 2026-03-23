@@ -37,7 +37,7 @@ const obtenerProductos = async (req: Request, res: Response) => {
 
     return respuestaAPI(res, "Productos obtenidos con éxito", {
       total_paginas,
-      productos: productosLimpiados,
+      datos: productosLimpiados,
     });
   } catch (error) {
     console.log(error);
