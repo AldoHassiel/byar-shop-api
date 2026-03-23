@@ -14,6 +14,8 @@ import {
 import { subirImagen } from "@/supabase/supabase.js";
 
 const obtenerProductos = async (req: Request, res: Response) => {
+  const userId = req.usuario?.id ?? null;
+
   const parametros = esquemaFiltrosProducto.safeParse(req.query);
 
   if (!parametros.success) {
@@ -25,7 +27,7 @@ const obtenerProductos = async (req: Request, res: Response) => {
   }
 
   try {
-    const productos = await ServicioProductos.obtenerProductos(parametros.data);
+    const productos = await ServicioProductos.obtenerProductos(parametros.data, userId);
 
     const total =
       productos.length > 0 ? parseInt(productos[0].total_registros) : 0;

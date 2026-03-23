@@ -4,7 +4,7 @@ import { Middle } from "@/middleware/middleware.js";
 
 const rutasProductos = Router();
 
-rutasProductos.get("/productos", ControladorProductos.obtenerProductos);
+rutasProductos.get("/productos", Middle.leerToken, ControladorProductos.obtenerProductos);
 rutasProductos.get("/productos/:id", ControladorProductos.obtenerProducto);
 rutasProductos.post(
   "/productos",
