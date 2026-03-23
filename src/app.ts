@@ -46,7 +46,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [FRONT_URL],
+    origin: ["http://localhost:5173/", FRONT_URL],
     methods: "*",
     allowedHeaders: "*",
     credentials: true,
