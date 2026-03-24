@@ -164,4 +164,50 @@ WHERE id_usuario = 2 AND id = 1;
 SELECT id, nombre_titular, ultimos_digitos, mes_vencimiento, ano_vencimiento, marca, es_predeterminada
 FROM metodos_de_pago
 WHERE activo = TRUE AND id_usuario = 2 AND id = 1
+
+-- NEGOCIO
+SELECT * FROM negocio;
+
+INSERT INTO negocio (
+    nombre,
+    descripcion,
+    sobre_de,
+	imagen_sobre_de_url,
+    instagram,
+    direccion,
+    dias_laborales,
+    hora_de_apertura,
+    hora_de_cierre,
+    hero_titulo,
+    hero_descripcion,
+	hero_imagen_url
+) VALUES (
+    'byarshop',
+    'Tienda de productos extranjeros de calidad',
+    'En Byarshop somos apasionados por traerte lo mejor del mundo. Nos especializamos en productos extranjeros de alta calidad, cuidadosamente seleccionados para ofrecerte una experiencia de compra única. Nos encontramos en el corazón de la ciudad, frente a la iglesia de la Plazuela 27 de Sep, donde cada fin de semana abrimos nuestras puertas para que descubras artículos exclusivos que no encontrarás en ningún otro lugar. ¡Ven y vive la experiencia Byarshop!',
+    '',
+	'https://www.instagram.com/byar.shop',
+    'Plazuela 27 de Sep frente a la iglesia',
+    'Viernes a Domingo',
+    '6:30 PM',
+    '10:00 PM',
+    'Bienvenido a byarshop',
+    'Encuentra los mejores productos al mejor precio',
+	''
+);
+
+UPDATE negocio
+SET
+	nombre = "byarshop",
+	descripcion = "Tienda de productos extranjeros de calidad",
+	sobre_de = ""
+	instagram = "https://www.instagram.com/byar.shop"
+	direccion = "",
+	dias_laborales = "",
+	hora_de_apertura = "",
+	hora_de_cierre = "",
+	hero_titulo = "Bienvenido a byarshop",
+	hero_descripcion = "Encuentra los mejores productos al mejor precio"
+WHERE id = 1;
+
    

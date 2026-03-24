@@ -184,14 +184,16 @@ CREATE TABLE detalle_pedido(
 CREATE TABLE negocio(
 	id SERIAL PRIMARY KEY NOT NULL,
 	nombre VARCHAR(50) NOT NULL,
-	descripcion VARCHAR(400),
-	imagen_url TEXT,
+	descripcion VARCHAR(500),
+	sobre_de VARCHAR(500),
+	imagen_sobre_de_url TEXT,
 	instagram VARCHAR(50),
 	direccion VARCHAR(255),
 	dias_laborales VARCHAR(255),
-	hora_de_apertura TIME,
-	hora_de_cierre TIME,
+	hora_de_apertura VARCHAR(20),
+	hora_de_cierre VARCHAR(20),
 	
-	titulo_hero VARCHAR(150), 
-	hero VARCHAR(400)
+	hero_titulo VARCHAR(150), 
+	hero_descripcion VARCHAR(400),
+	hero_imagen_url TEXT
 );
