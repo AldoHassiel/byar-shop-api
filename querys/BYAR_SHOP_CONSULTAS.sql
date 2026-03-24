@@ -198,16 +198,18 @@ INSERT INTO negocio (
 
 UPDATE negocio
 SET
-	nombre = "byarshop",
-	descripcion = "Tienda de productos extranjeros de calidad",
-	sobre_de = ""
-	instagram = "https://www.instagram.com/byar.shop"
-	direccion = "",
-	dias_laborales = "",
-	hora_de_apertura = "",
-	hora_de_cierre = "",
-	hero_titulo = "Bienvenido a byarshop",
-	hero_descripcion = "Encuentra los mejores productos al mejor precio"
+    nombre = 'byarshop',
+    descripcion = 'Tienda de productos extranjeros de calidad',
+    sobre_de = 'En Byarshop somos apasionados por traerte lo mejor del mundo. Nos especializamos en productos extranjeros de alta calidad, cuidadosamente seleccionados para ofrecerte una experiencia de compra única. Nos encontramos en el corazón de la ciudad, frente a la iglesia de la Plazuela 27 de Sep, donde cada fin de semana abrimos nuestras puertas para que descubras artículos exclusivos que no encontrarás en ningún otro lugar. ¡Ven y vive la experiencia Byarshop!',
+    imagen_sobre_de_url = '',
+    instagram = 'https://www.instagram.com/byar.shop',
+    direccion = 'Plazuela 27 de Sep frente a la iglesia',
+    dias_laborales = 'Viernes a Domingo',
+    hora_de_apertura = '6:30 PM',
+    hora_de_cierre = '10:00 PM',
+    hero_titulo = 'Bienvenido a byarshop',
+    hero_descripcion = 'Encuentra los mejores productos al mejor precio',
+    hero_imagen_url = ''
 WHERE id = 1;
 
    
