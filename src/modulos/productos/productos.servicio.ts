@@ -6,7 +6,10 @@ import type {
 } from "./productos.esquema.js";
 import { eliminarImagen } from "@/supabase/supabase.js";
 
-export const obtenerProductos = async (filtros: FiltrosProductoDTO, usuarioId: number | null) => {
+export const obtenerProductos = async (
+  filtros: FiltrosProductoDTO,
+  usuarioId: number | null,
+) => {
   const consulta = await db.query(
     `
     SELECT * FROM obtener_productos($1, $2, $3, $4, $5, $6, $7, $8, $9)
