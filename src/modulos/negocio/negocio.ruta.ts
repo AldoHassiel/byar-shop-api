@@ -5,7 +5,7 @@ import { Middle } from "@/middleware/middleware.js";
 const rutasNegocio = Router();
 
 rutasNegocio.get("/negocio", ControladorNegocio.obtenerNegocio);
-rutasNegocio.get(
+rutasNegocio.post(
   "/negocio",
   Middle.eresAdmin,
   Middle.subirArchivos.fields([
