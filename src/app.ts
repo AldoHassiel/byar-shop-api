@@ -21,6 +21,7 @@ import rutasEstadosPedidos from "./modulos/estadosPedidos/estados.ruta.js";
 import rutasDirecciones from "./modulos/usuario/direcciones/direcciones.ruta.js";
 import rutasMetodosPago from "./modulos/usuario/metodosDePago/metodosPago.ruta.js";
 import rutasNegocio from "./modulos/negocio/negocio.ruta.js";
+import "@/modulos/usuario/misDatos/misDatos.ruta.js";
 
 import "@/modulos/productos/productos.docs.js";
 import "@/modulos/autenticacion/autenticacion.docs.js";
@@ -36,6 +37,7 @@ import "@/modulos/negocio/negocio.docs.js";
 
 import { registro } from "./config/openAPI/openAPI.registro.js";
 import { generarDocumentacion } from "./config/openAPI/openAPI.config.js";
+import rutaMisDatos from "@/modulos/usuario/misDatos/misDatos.ruta.js";
 
 registro.registerComponent("securitySchemes", "autenticacionBearer", {
   type: "http",
@@ -70,6 +72,7 @@ app.use(rutasEstadosPedidos);
 app.use(rutasDirecciones);
 app.use(rutasMetodosPago);
 app.use(rutasNegocio);
+app.use(rutaMisDatos);
 
 const especificacion = generarDocumentacion();
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(especificacion));

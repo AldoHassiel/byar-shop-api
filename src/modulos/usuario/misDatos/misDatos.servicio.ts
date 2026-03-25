@@ -12,7 +12,7 @@ const obtener = async (idUsuario: number) => {
     SELECT nombre, apellidos, telefono, correo
     FROM usuarios
     WHERE id = $1 AND activo = TRUE
-    `);
+    `, [idUsuario]);
 
   return consulta.rows[0];
 };

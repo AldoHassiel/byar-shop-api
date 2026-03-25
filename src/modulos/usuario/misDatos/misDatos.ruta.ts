@@ -11,7 +11,7 @@ rutaMisDatos.get(
 );
 
 rutaMisDatos.put(
-  "/usuario/:usuarioId/misDatos",
+  "/usuario/:usuarioId/misDatos/editar",
   Middle.eresEseUsuario,
   ControladorMisDatos.editarDatosGenerales,
 );
