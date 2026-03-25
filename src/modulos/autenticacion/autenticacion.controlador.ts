@@ -29,7 +29,7 @@ export const registrar = async (req: Request, res: Response) => {
 
     res.cookie("token", respuesta.token, opcionesCookie);
 
-    return respuestaOk(res, "Todo bien", respuesta.usuario, 201);
+    return respuestaOk(res, "Todo bien", [respuesta.usuario], 201);
   } catch (error) {
     const mensaje = (error as Error).message;
 
@@ -57,7 +57,7 @@ export const iniciarSesion = async (req: Request, res: Response) => {
     return respuestaOk(
       res,
       "Iniciado sesión éxitosamente",
-      respuesta.usuario,
+      [respuesta.usuario],
       200,
     );
   } catch (error) {
