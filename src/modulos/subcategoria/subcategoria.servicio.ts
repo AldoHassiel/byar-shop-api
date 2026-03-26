@@ -2,6 +2,33 @@ import { db } from "@/config/db.js";
 import { type SubcategoriaDTO } from "./subcategoria.esquema.js";
 import { ca } from "zod/locales";
 
+const obtenerCategoriasConSubcategorias = async (
+) => {
+
+  const consulta = await db.query(
+    `SELECT 
+      c.id AS id_categoria,
+      c.nombre AS categoria,
+      COALESCE(
+        json_agg(
+          json_build_object(
+            'id', s.id,
+            'nombre', s.nombre,
+            'id_categoria', s.id_categoria
+          )
+        ) FILTER (WHERE s.id IS NOT NULL),
+        '[]'
+      ) AS subcategorias
+    FROM categorias c
+    LEFT JOIN subcategorias s 
+      ON s.id_categoria = c.id AND s.activo = true
+    WHERE c.activo = true
+    GROUP BY c.id;`,
+  );
+
+  return consulta.rows;
+};
+
 const obtenerSubcategorias = async (es_admin: boolean | undefined) => {
   if (es_admin) {
     const consulta = await db.query(
@@ -115,4 +142,5 @@ export const ServicioSubcategorias = {
   crearSubcategoria,
   editarSubcategoria,
   eliminarSubcategoria,
+  obtenerCategoriasConSubcategorias,
 };

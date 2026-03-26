@@ -11,6 +11,12 @@ enrutador.get(
 );
 
 enrutador.get(
+  "/categorias-subcategorias",
+  Middle.leerToken,
+  ControladorSubcategoria.obtenerCategoriasConSubcategorias,
+);
+
+enrutador.get(
   "/subcategorias/:id",
   Middle.leerToken,
   ControladorSubcategoria.obtenerSubcategoria,

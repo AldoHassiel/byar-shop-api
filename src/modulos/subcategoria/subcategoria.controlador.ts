@@ -93,10 +93,30 @@ const eliminarSubcategoria = async (req: Request, res: Response) => {
   }
 };
 
+const obtenerCategoriasConSubcategorias = async (
+  req: Request,
+  res: Response,
+) => {
+  try {
+    const resultado =
+      await ServicioSubcategorias.obtenerCategoriasConSubcategorias();
+
+    return respuestaOk(
+      res,
+      "Categorías con subcategorías obtenidas con éxito",
+      resultado,
+    );
+  } catch (error) {
+    console.log(error);
+    return respuestaError(res, "Error interno del servidor");
+  }
+};
+
 export const ControladorSubcategoria = {
   obtenerSubcategorias,
   obtenerSubcategoria,
   crearSubcategoria,
   editarSubcategoria,
   eliminarSubcategoria,
+  obtenerCategoriasConSubcategorias,
 };
