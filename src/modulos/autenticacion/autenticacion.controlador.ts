@@ -1,4 +1,4 @@
-import type { CookieOptions, Request, Response } from "express";
+import type { Request, Response } from "express";
 import {
   esquemaRegistro,
   esquemaInicioSesion,
@@ -10,14 +10,11 @@ import {
   respuestaOk,
 } from "@/utilidades/respuesta.js";
 
-const esProduccion = process.env.NODE_ENV === "production";
-
-const opcionesCookie: CookieOptions = {
+const opcionesCookie = {
   httpOnly: true,
-  secure: esProduccion,
-  sameSite: esProduccion ? "none" : "lax",
+  secure: process.env.NODE_ENV === "produccion",
+  sameSite: "strict" as const,
   maxAge: 7 * 24 * 60 * 60 * 1000,
-  path: "/",
 };
 
 export const registrar = async (req: Request, res: Response) => {
