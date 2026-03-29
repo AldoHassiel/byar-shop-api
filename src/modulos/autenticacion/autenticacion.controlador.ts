@@ -31,7 +31,12 @@ export const registrar = async (req: Request, res: Response) => {
 
     res.cookie("token", respuesta.token, opcionesCookie);
 
-    return respuestaOk(res, "Todo bien", [respuesta.usuario], 201);
+    return respuestaOk(
+      res,
+      "Cuenta creada con éxito",
+      [respuesta.usuario],
+      201,
+    );
   } catch (error) {
     const mensaje = (error as Error).message;
 
