@@ -38,6 +38,7 @@ import "@/modulos/negocio/negocio.docs.js";
 import { registro } from "./config/openAPI/openAPI.registro.js";
 import { generarDocumentacion } from "./config/openAPI/openAPI.config.js";
 import rutaMisDatos from "@/modulos/usuario/misDatos/misDatos.ruta.js";
+import rutaCarrito from "./modulos/usuario/carrito/carrito.ruta.js";
 
 registro.registerComponent("securitySchemes", "autenticacionBearer", {
   type: "http",
@@ -73,6 +74,7 @@ app.use(rutasDirecciones);
 app.use(rutasMetodosPago);
 app.use(rutasNegocio);
 app.use(rutaMisDatos);
+app.use(rutaCarrito);
 
 const especificacion = generarDocumentacion();
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(especificacion));
