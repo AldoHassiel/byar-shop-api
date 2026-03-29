@@ -114,3 +114,17 @@ $$ LANGUAGE plpgsql;
 DROP FUNCTION obtener_producto();
 
 SELECT * FROM obtener_producto(10);
+
+-- CARRITO
+CREATE OR REPLACE FUNCTION agregar_carrito(
+	p.id_usuario INT NOT NULL,
+	p_id_producto INT NOT NULL,
+	p_cantidad INT NOT NULL,
+)
+AS $$
+DECLARE
+	cantidad INT;
+BEGIN
+	
+END
+$$ LANGUAGE plpgsql;
