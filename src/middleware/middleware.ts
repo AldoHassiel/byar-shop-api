@@ -5,8 +5,16 @@ import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
 
+const extraerToken = (req: Request): string | null => {
+  const auth = req.headers.authorization;
+  if (auth?.startsWith("Bearer ")) {
+    return auth.substring(7);
+  }
+  return req.cookies?.token ?? null;
+};
+
 const leerToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.token;
+  const token = extraerToken(req);
 
   if (!token) return next();
 
@@ -18,7 +26,7 @@ const leerToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const eresEseUsuario = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.token;
+  const token = extraerToken(req);
 
   if (!token) {
     return respuestaError(res, "Token de usuario requerido", 498);
@@ -52,7 +60,7 @@ const eresEseUsuario = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const eresAdmin = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.token;
+  const token = extraerToken(req);
 
   if (!token) {
     return respuestaError(res, "Token de administrador requerido", 401);

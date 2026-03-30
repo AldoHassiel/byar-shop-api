@@ -34,7 +34,7 @@ export const registrar = async (req: Request, res: Response) => {
     return respuestaOk(
       res,
       "Cuenta creada con éxito",
-      [respuesta.usuario],
+      [{ usuario: respuesta.usuario, token: respuesta.token }],
       201,
     );
   } catch (error) {
@@ -64,7 +64,7 @@ export const iniciarSesion = async (req: Request, res: Response) => {
     return respuestaOk(
       res,
       "Iniciado sesión éxitosamente",
-      [respuesta.usuario],
+      [{ usuario: respuesta.usuario, token: respuesta.token }],
       200,
     );
   } catch (error) {
