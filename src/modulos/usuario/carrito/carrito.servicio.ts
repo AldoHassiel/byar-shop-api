@@ -117,10 +117,17 @@ const obtenerProductos = async (id_usuario: number) => {
       m.nombre AS marca,
       p.stock AS stock,
       c.cantidad,
-      p.precio * c.cantidad AS total
+      p.precio * c.cantidad AS total,
+      p.id_subcategoria AS id_subcategoria,
+      c.id AS id_categoria,
+      p.id_marca AS id_marca
     FROM carrito c
     INNER JOIN productos p
     ON p.id = c.id_producto
+    INNER JOIN subcategorias s
+    ON s.id = p.id_subcategoria
+    INNER JOIN categorias ca
+    ON ca.id = s.id_categoria
     INNER JOIN marcas m
     ON m.id = p.id_marca
     WHERE c.id_usuario = $1
