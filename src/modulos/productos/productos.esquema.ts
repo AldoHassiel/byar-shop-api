@@ -7,53 +7,92 @@ export const esquemaProducto = z
   .object({
     nombre: z
       .string()
+      .min(1, "El nombre del producto es requerido")
       .describe("Nombre del producto. Debe ser único en el sistema"),
+
     descripcion: z
       .string()
       .optional()
       .describe(
         "Descripción detallada del producto, características y especificaciones",
       ),
+
     precio: z.coerce
       .number()
+      .min(0.01, "El precio debe ser mayor a 0")
       .describe(
         "Precio del producto en Pesos Mexicanos (MXN). Ejemplo: 299.99",
       ),
+
     stock: z.coerce
       .number()
+      .int("El stock debe ser un número entero")
+      .min(1, "El stock debe ser al menos 1")
       .describe("Cantidad de unidades disponibles en inventario. Ejemplo: 50"),
+
     imagen_url: z
       .string()
       .optional()
       .describe("URL de la imagen del producto alojada en el servidor"),
+
     id_subcategoria: z.coerce
       .number()
+      .int("El ID de subcategoría debe ser un entero")
+      .min(1, "La subcategoría es requerida")
       .describe("ID de la subcategoría a la que pertenece el producto"),
-    id_marca: z.coerce.number().describe("ID de la marca del producto"),
+
+    id_marca: z.coerce
+      .number()
+      .int("El ID de marca debe ser un entero")
+      .min(1, "La marca es requerida")
+      .describe("ID de la marca del producto"),
   })
   .openapi("Producto");
 
 export const esquemaProductoEditado = z
   .object({
-    nombre: z.string().describe("Nombre del producto actualizado"),
+    nombre: z
+      .string()
+      .min(1, "El nombre del producto es requerido")
+      .describe("Nombre del producto actualizado"),
+
     descripcion: z
       .string()
       .optional()
       .describe("Nueva descripción del producto"),
-    precio: z.coerce.number().describe("Nuevo precio en Pesos Mexicanos (MXN)"),
+
+    precio: z.coerce
+      .number()
+      .min(0.01, "El precio debe ser mayor a 0")
+      .describe("Nuevo precio en Pesos Mexicanos (MXN)"),
+
     stock: z.coerce
       .number()
+      .int("El stock debe ser un número entero")
+      .min(1, "El stock debe ser al menos 1")
       .describe("Nuevas unidades disponibles en inventario"),
+
     imagen_url: z
       .string()
       .optional()
       .describe("URL de la imagen actual del producto"),
+
     id_subcategoria: z.coerce
       .number()
+      .int("El ID de subcategoría debe ser un entero")
+      .min(1, "La subcategoría es requerida")
       .describe("ID de la subcategoría del producto"),
-    id_marca: z.coerce.number().describe("ID de la marca del producto"),
+
+    id_marca: z.coerce
+      .number()
+      .int("El ID de marca debe ser un entero")
+      .min(1, "La marca es requerida")
+      .describe("ID de la marca del producto"),
+
     accion_imagen: z
-      .enum(["conservar", "nueva", "eliminar"])
+      .enum(["conservar", "nueva", "eliminar"], {
+        message: "La acción debe ser: conservar, nueva o eliminar",
+      })
       .describe(
         "Acción a realizar con la imagen: conservar la actual, subir una nueva, o eliminarla",
       ),
@@ -66,44 +105,51 @@ export const esquemaFiltrosProducto = z
       .string()
       .optional()
       .describe("Filtro opcional por nombre del producto"),
+
     precio_min: z.coerce
       .number()
-      .positive()
+      .min(0.01, "El precio mínimo debe ser mayor a 0")
       .optional()
       .describe("Precio mínimo para filtrar productos (MXN). Ejemplo: 100"),
+
     precio_max: z.coerce
       .number()
-      .positive()
+      .min(0.01, "El precio máximo debe ser mayor a 0")
       .optional()
       .describe("Precio máximo para filtrar productos (MXN). Ejemplo: 1000"),
+
     id_marca: z.coerce
       .number()
-      .int()
-      .positive()
+      .int("El ID de marca debe ser un entero")
+      .min(1, "El ID de marca debe ser mayor a 0")
       .optional()
       .describe("Filtro opcional por ID de marca"),
+
     id_categoria: z.coerce
       .number()
-      .int()
-      .positive()
+      .int("El ID de categoría debe ser un entero")
+      .min(1, "El ID de categoría debe ser mayor a 0")
       .optional()
       .describe("Filtro opcional por ID de categoría"),
+
     id_subcategoria: z.coerce
       .number()
-      .int()
-      .positive()
+      .int("El ID de subcategoría debe ser un entero")
+      .min(1, "El ID de subcategoría debe ser mayor a 0")
       .optional()
       .describe("Filtro opcional por ID de subcategoría"),
+
     pagina: z.coerce
       .number()
-      .int()
-      .positive()
+      .int("La página debe ser un número entero")
+      .min(1, "La página debe ser mayor a 0")
       .optional()
       .describe("Número de página para paginación (comienza en 1). Ejemplo: 1"),
+
     limite: z.coerce
       .number()
-      .int()
-      .positive()
+      .int("El límite debe ser un número entero")
+      .min(1, "El límite debe ser mayor a 0")
       .optional()
       .describe(
         "Cantidad de registros por página (por defecto 20). Ejemplo: 20",
@@ -115,7 +161,6 @@ export type ProductoDTO = z.infer<typeof esquemaProducto>;
 export type ProductoEditadoDTO = z.infer<typeof esquemaProductoEditado>;
 export type FiltrosProductoDTO = z.infer<typeof esquemaFiltrosProducto>;
 
-// Esquema de respuesta para GET /productos (producto obtenido de la BD)
 export const esquemaProductoObtenido = z
   .object({
     id: z.number().describe("ID único del producto"),
