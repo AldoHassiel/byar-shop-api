@@ -8,7 +8,8 @@ CREATE OR REPLACE FUNCTION obtener_productos(
 	p_precio_min NUMERIC DEFAULT NULL,
 	p_precio_max NUMERIC DEFAULT NULL,
 	p_pagina INT DEFAULT 1,
-	p_limite INT DEFAULT 20
+	p_limite INT DEFAULT 20,
+	p_id_usuario INT DEFAULT NULL
 )
 RETURNS TABLE(
 	id INT,
@@ -17,15 +18,18 @@ RETURNS TABLE(
 	descripcion VARCHAR(255),
 	precio NUMERIC(10,2),
 	stock INT,
+	id_categoria INT,
+	id_subcategoria INT,
+	id_marca INT,
 	nombre_categoria VARCHAR(100),
 	nombre_subcategoria VARCHAR(100),
 	nombre_marca VARCHAR(100),
+	es_favorito BOOLEAN,
 	total_registros BIGINT
 )
 AS $$
 BEGIN
 	RETURN QUERY
-
 	SELECT
 		p.id,
 		p.imagen_url,
@@ -33,9 +37,20 @@ BEGIN
 		p.descripcion,
 		p.precio,
 		p.stock,
+		c.id AS id_categoria,
+		s.id AS id_subcategoria,
+		m.id AS id_marca,
 		c.nombre AS nombre_categoria,
 		s.nombre AS nombre_subcategoria,
 		m.nombre AS nombre_marca,
+		CASE
+			WHEN p_id_usuario IS NULL THEN FALSE
+			ELSE EXISTS (
+				SELECT 1 FROM mis_favoritos f
+				WHERE f.id_usuario = p_id_usuario
+				AND f.id_producto = p.id
+			)
+		END AS es_favorito,
 		COUNT(*) OVER() AS total_registros
 	FROM productos p
 	INNER JOIN subcategorias s
