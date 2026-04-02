@@ -8,13 +8,16 @@ import bcrypt from "bcrypt";
 import { SAL } from "@/config/global.js";
 
 const obtener = async (idUsuario: number) => {
-  const consulta = await db.query(`
+  const consulta = await db.query(
+    `
     SELECT nombre, apellidos, telefono, correo
     FROM usuarios
     WHERE id = $1 AND activo = TRUE
-    `, [idUsuario]);
+    `,
+    [idUsuario],
+  );
 
-  return consulta.rows[0];
+  return consulta.rows;
 };
 
 const editarDatosGenerales = async (
