@@ -80,5 +80,5 @@ export const iniciarSesion = async (req: Request, res: Response) => {
 
 export const cerrarSesion = async (_req: Request, res: Response) => {
   res.clearCookie("token", opcionesCookie);
-  respuestaOk(res, "Sesión cerrada correctamente", 200);
+  respuestaOk(res, "Sesión cerrada correctamente", null);
 };
