@@ -28,4 +28,10 @@ rutaMisDatos.patch(
   ControladorMisDatos.editarPwd,
 );
 
+rutaMisDatos.delete(
+  "/usuario/:usuarioId/misDatos/cuenta",
+  Middle.eresEseUsuario,
+  ControladorMisDatos.eliminarCuenta,
+);
+
 export default rutaMisDatos;

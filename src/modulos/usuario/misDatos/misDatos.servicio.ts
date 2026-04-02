@@ -100,9 +100,27 @@ const editarPwd = async (idUsuario: number, datos: MisDatosEditarPwdDTO) => {
   return;
 };
 
+const eliminarCuenta = async (idUsuario: number) => {
+  const consulta = await db.query(
+    `
+    UPDATE usuarios SET
+      activo = false
+    WHERE id = $1
+    `,
+    [idUsuario],
+  );
+
+  if (!consulta.rowCount) {
+    throw Error("No se pudo eliminar la cuenta");
+  }
+
+  return;
+};
+
 export const ServicioMisDatos = {
   obtener,
   editarDatosGenerales,
   editarCorreo,
   editarPwd,
+  eliminarCuenta,
 };

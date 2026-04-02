@@ -1,3 +1,4 @@
+import { db } from "@/config/db.js";
 import { SECRETO_JWT } from "@/config/global.js";
 import { respuestaError } from "@/utilidades/respuesta.js";
 import type { Token } from "@/utilidades/token.js";
@@ -25,9 +26,19 @@ const leerToken = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-const eresEseUsuario = (req: Request, res: Response, next: NextFunction) => {
-  const token = extraerToken(req);
+const verificarUsuarioActivo = async (id: number): Promise<boolean> => {
+  const { rows } = await db.query(`SELECT activo FROM usuarios WHERE id = $1`, [
+    id,
+  ]);
+  return rows[0]?.activo === true;
+};
 
+const eresEseUsuario = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const token = extraerToken(req);
   if (!token) {
     return respuestaError(res, "Token de usuario requerido", 498);
   }
@@ -39,6 +50,13 @@ const eresEseUsuario = (req: Request, res: Response, next: NextFunction) => {
   try {
     const datos = jwt.verify(token, SECRETO_JWT) as Token;
 
+    const estaActivo = await verificarUsuarioActivo(
+      datos.es_admin ? Number(req.params.usuarioId) : datos.id,
+    );
+    if (!estaActivo) {
+      return respuestaError(res, "Cuenta eliminada", 401);
+    }
+
     if (datos.es_admin) {
       req.usuario = {
         id: Number(req.params.usuarioId),
@@ -47,14 +65,13 @@ const eresEseUsuario = (req: Request, res: Response, next: NextFunction) => {
       };
       return next();
     }
-
     if (datos.id !== Number(req.params.usuarioId)) {
       return respuestaError(res, "No eres ESE usuario", 401);
     }
 
     req.usuario = datos;
     return next();
-  } catch (error) {
+  } catch {
     return respuestaError(res, "Token inválido o expirado", 498);
   }
 };
