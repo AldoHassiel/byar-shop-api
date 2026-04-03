@@ -4,6 +4,7 @@ const obtenerFavoritos = async (idUsuario: number) => {
     const resultado = await db.query(
         `
     SELECT
+      p.id,
       p.imagen_url,
       p.nombre,
       p.descripcion
