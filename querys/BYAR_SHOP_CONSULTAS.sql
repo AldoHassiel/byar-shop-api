@@ -168,33 +168,32 @@ WHERE activo = TRUE AND id_usuario = 2 AND id = 1
 -- NEGOCIO
 SELECT * FROM negocio;
 
-INSERT INTO negocio (
-    nombre,
-    descripcion,
-    sobre_de,
-	imagen_sobre_de_url,
-    instagram,
-    direccion,
-    dias_laborales,
-    hora_de_apertura,
-    hora_de_cierre,
-    hero_titulo,
-    hero_descripcion,
+INSERT INTO negocio(
+	logotipo_url,
+	nombre,
+	whatsapp,
+	sobre_nosotros,
+	imagen_sobre_nosotros_url,
+	instagram,
+	direccion,
+	dias_laborales,
+	hora_de_apertura,
+	hora_de_cierre,
 	hero_imagen_url
-) VALUES (
-    'byarshop',
-    'Tienda de productos extranjeros de calidad',
-    'En Byarshop somos apasionados por traerte lo mejor del mundo. Nos especializamos en productos extranjeros de alta calidad, cuidadosamente seleccionados para ofrecerte una experiencia de compra única. Nos encontramos en el corazón de la ciudad, frente a la iglesia de la Plazuela 27 de Sep, donde cada fin de semana abrimos nuestras puertas para que descubras artículos exclusivos que no encontrarás en ningún otro lugar. ¡Ven y vive la experiencia Byarshop!',
-    '',
+)
+VALUES (
+	'',
+	'byarshop',
+	'6682219010',
+	'En Byarshop somos apasionados por traerte lo mejor del mundo. Nos especializamos en productos extranjeros de alta calidad, cuidadosamente seleccionados para ofrecerte una experiencia de compra única. Nos encontramos en el corazón de la ciudad, frente a la iglesia de la Plazuela 27 de Sep, donde cada fin de semana abrimos nuestras puertas para que descubras artículos exclusivos que no encontrarás en ningún otro lugar. ¡Ven y vive la experiencia Byarshop!',
+	'',
 	'https://www.instagram.com/byar.shop',
-    'Plazuela 27 de Sep frente a la iglesia',
+	'Plazuela 27 de Sep frente a la iglesia',
     'Viernes a Domingo',
-    '6:30 PM',
-    '10:00 PM',
-    'Bienvenido a byarshop',
-    'Encuentra los mejores productos al mejor precio',
+	'18:30',
+	'22:00',
 	''
-);
+)
 
 UPDATE negocio
 SET
