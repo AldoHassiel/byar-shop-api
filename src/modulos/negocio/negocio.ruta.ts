@@ -5,14 +5,15 @@ import { Middle } from "@/middleware/middleware.js";
 const rutasNegocio = Router();
 
 rutasNegocio.get("/negocio", ControladorNegocio.obtenerNegocio);
-rutasNegocio.post(
+rutasNegocio.put(
   "/negocio",
   Middle.eresAdmin,
   Middle.subirArchivos.fields([
-    { name: "imagen_sobre_de", maxCount: 1 },
-    { name: "imagen_hero", maxCount: 1 },
+    { name: "logotipo", maxCount: 1 },
+    { name: "imagen_sobre_nosotros", maxCount: 1 },
+    { name: "hero_imagen", maxCount: 1 },
   ]),
-  ControladorNegocio.obtenerNegocio,
+  ControladorNegocio.editarNegocio,
 );
 
 export default rutasNegocio;

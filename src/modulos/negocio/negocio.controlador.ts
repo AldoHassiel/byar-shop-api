@@ -5,8 +5,8 @@ import {
   respuestaErrorValidacion,
   respuestaOk,
 } from "@/utilidades/respuesta.js";
-import { esquemaNegocio } from "./negocio.esquema.js";
-import { subirImagen } from "@/supabase/supabase.js";
+import { eliminarImagen, subirImagen } from "@/supabase/supabase.js";
+import { esquemaEditarNegocio } from "./negocio.esquema.js";
 
 const obtenerNegocio = async (req: Request, res: Response) => {
   try {
@@ -24,41 +24,59 @@ const obtenerNegocio = async (req: Request, res: Response) => {
 };
 
 const editarNegocio = async (req: Request, res: Response) => {
-  const negocio = esquemaNegocio.safeParse(req.body);
+  const negocio = esquemaEditarNegocio.safeParse(req.body);
+
   if (!negocio.success) {
     return respuestaErrorValidacion(res, negocio.error);
   }
 
-  const files = req.files as {
-    imagen_sobre_de?: Express.Multer.File[];
-    imagen_hero?: Express.Multer.File[];
-  };
-
-  const archivoSobreDe = files?.imagen_sobre_de?.[0];
-  const archivoHero = files?.imagen_hero?.[0];
-
-  if (negocio.data.accion_imagen_sobre_de === "nueva" && !archivoSobreDe) {
-    return respuestaError(res, "Se esperaba una imagen para 'sobre de'", 400);
-  }
-  if (negocio.data.accion_imagen_hero === "nueva" && !archivoHero) {
-    return respuestaError(res, "Se esperaba una imagen para el hero", 400);
-  }
+  const archivos = req.files as { [fieldname: string]: Express.Multer.File[] };
 
   try {
-    let imagenSobreDeUrl: string | undefined = undefined;
-    if (negocio.data.accion_imagen_sobre_de === "nueva" && archivoSobreDe) {
-      imagenSobreDeUrl = await subirImagen(archivoSobreDe, "negocio");
+    const negocioPeticion = await ServicioNegocio.obtenerNegocio();
+
+    if (!negocioPeticion) {
+      return respuestaError(res, "Negocio no encontrado", 404);
     }
 
-    let imagenHeroUrl: string | undefined = undefined;
-    if (negocio.data.accion_imagen_hero === "nueva" && archivoHero) {
-      imagenHeroUrl = await subirImagen(archivoHero, "negocio");
+    const negocioDatos = negocioPeticion[0];
+
+    let logotipo_url: string | undefined;
+
+    if (archivos?.logotipo?.[0]) {
+      if (negocioDatos.logotipo_url) {
+        await eliminarImagen(negocioDatos.logotipo_url);
+      }
+
+      logotipo_url = await subirImagen(archivos.logotipo[0], "negocio");
+    }
+
+    let imagen_sobre_nosotros_url: string | undefined;
+    if (archivos?.imagen_sobre_nosotros?.[0]) {
+      if (negocioDatos.imagen_sobre_nosotros_url) {
+        await eliminarImagen(negocioDatos.imagen_sobre_nosotros_url);
+      }
+
+      imagen_sobre_nosotros_url = await subirImagen(
+        archivos.imagen_sobre_nosotros[0],
+        "negocio",
+      );
+    }
+
+    let hero_imagen_url: string | undefined;
+    if (archivos?.hero_imagen?.[0]) {
+      if (negocioDatos.hero_imagen_url) {
+        await eliminarImagen(negocioDatos.hero_imagen_url);
+      }
+
+      hero_imagen_url = await subirImagen(archivos.hero_imagen[0], "negocio");
     }
 
     await ServicioNegocio.editarNegocio({
       ...negocio.data,
-      imagen_sobre_de_url: imagenSobreDeUrl,
-      hero_imagen_url: imagenHeroUrl,
+      logotipo_url,
+      imagen_sobre_nosotros_url,
+      hero_imagen_url,
     });
 
     return respuestaOk(res, "Negocio editado con éxito");

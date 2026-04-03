@@ -33,7 +33,7 @@ import "@/modulos/usuario/direcciones/direcciones.docs.js";
 import "@/modulos/usuario/metodosDePago/metodosPago.docs.js";
 import "@/modulos/cp/cp.docs.js";
 import "@/modulos/estadosPedidos/estados.docs.js";
-import "@/modulos/negocio/negocio.docs.js";
+
 
 import { registro } from "./config/openAPI/openAPI.registro.js";
 import { generarDocumentacion } from "./config/openAPI/openAPI.config.js";
