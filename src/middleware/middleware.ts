@@ -33,7 +33,7 @@ const eresEseUsuario = (req: Request, res: Response, next: NextFunction) => {
   }
 
   if (!req.params.usuarioId) {
-    return respuestaError(res, "Token de usuario requerido", 496);
+    return respuestaError(res, "Token de usuario requerido", 498);
   }
 
   try {
