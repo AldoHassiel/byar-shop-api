@@ -21,7 +21,7 @@ const leerToken = (req: Request, res: Response, next: NextFunction) => {
   try {
     const datos = jwt.verify(token, SECRETO_JWT) as Token;
     req.usuario = datos;
-  } catch {}
+  } catch { }
   next();
 };
 
@@ -33,7 +33,7 @@ const eresEseUsuario = (req: Request, res: Response, next: NextFunction) => {
   }
 
   if (!req.params.usuarioId) {
-    return respuestaError(res, "Token de usuario requerido", 498);
+    return respuestaError(res, "Token de usuario requerido", 496);
   }
 
   try {
