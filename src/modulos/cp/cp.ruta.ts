@@ -9,28 +9,41 @@ rutasCP.get("/cp/:cp", async (req, res) => {
       `https://sepomex.icalialabs.com/api/v1/zip_codes?zip_code=${req.params.cp}`,
     );
 
-    const { zip_codes } = await consulta.json();
+    interface ZipCodes {
+      d_estado: string;
+      d_mnpio: string;
+      d_ciudad: string;
+      d_asenta: string;
+    }
 
-    const cosas = zip_codes.map(
-      (dato: {
-        d_asenta: string;
-        d_mnpio: string;
-        d_estado: string;
-        d_ciudad: string;
-      }) => {
-        return {
-          colonia: dato.d_asenta,
-          municipio: dato.d_mnpio,
-          estado: dato.d_estado,
-          ciudad: dato.d_ciudad,
-        };
-      },
-    );
+    const { zip_codes }: { zip_codes: ZipCodes[] } = await consulta.json();
+
+    const obtenerValoresUnicos = (
+      zip_codes: ZipCodes[],
+      llave: keyof ZipCodes,
+    ) => {
+      const todosLosValores = zip_codes.map((dato) => dato[llave]);
+      const sinDuplicados = new Set(todosLosValores);
+      const comoArray = Array.from(sinDuplicados);
+      return comoArray;
+    };
+
+    const estados = obtenerValoresUnicos(zip_codes, "d_estado");
+    const municipios = obtenerValoresUnicos(zip_codes, "d_mnpio");
+    const ciudades = obtenerValoresUnicos(zip_codes, "d_ciudad");
+    const colonias = obtenerValoresUnicos(zip_codes, "d_asenta");
+
+    const info = {
+      estados,
+      municipios,
+      ciudades,
+      colonias,
+    };
 
     return respuestaOk(
       res,
       "Datos del codigo postal obtenidos con exito",
-      cosas,
+      info,
     );
   } catch (error) {
     console.log(error);
