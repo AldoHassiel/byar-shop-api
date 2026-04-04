@@ -43,7 +43,7 @@ rutasCP.get("/cp/:cp", async (req, res) => {
     return respuestaOk(
       res,
       "Datos del codigo postal obtenidos con exito",
-      info,
+      [info],
     );
   } catch (error) {
     console.log(error);
