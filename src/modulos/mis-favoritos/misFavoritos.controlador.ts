@@ -18,7 +18,7 @@ const obtenerFavoritos = async (req: Request, res: Response) => {
         const favoritos = await ServicioMisFavoritos.obtenerFavoritos(
             idUsuario,
         );
-        return respuestaOk(res, "Favoritos obtenidos", { favoritos });
+        return respuestaOk(res, "Favoritos obtenidos", favoritos);
     } catch (error) {
         return respuestaError(res, (error as Error).message || "Error interno");
     }
