@@ -22,7 +22,7 @@ const leerToken = (req: Request, res: Response, next: NextFunction) => {
   try {
     const datos = jwt.verify(token, SECRETO_JWT) as Token;
     req.usuario = datos;
-  } catch {}
+  } catch { }
   next();
 };
 
