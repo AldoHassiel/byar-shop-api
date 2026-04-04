@@ -4,8 +4,8 @@ import { Middle } from "@/middleware/middleware.js";
 
 const rutasFavoritos = Router();
 
-rutasFavoritos.get("/mis-favoritos/:usuarioId", Middle.leerToken, Middle.eresEseUsuario, ControladorMisFavoritos.obtenerFavoritos);
-rutasFavoritos.delete("/mis-favoritos/eliminar/:usuarioId/:id", Middle.leerToken, Middle.eresEseUsuario, ControladorMisFavoritos.eliminarFavorito);
-rutasFavoritos.post("/mis-favoritos/agregar/:usuarioId/:id", Middle.leerToken, Middle.eresEseUsuario, ControladorMisFavoritos.agregarFavorito);
+rutasFavoritos.get("/usuarios/:usuarioId/mis-favoritos", Middle.eresEseUsuario, ControladorMisFavoritos.obtenerFavoritos);
+rutasFavoritos.delete("/usuarios/:usuarioId/mis-favoritos/eliminar/producto/:id", Middle.eresEseUsuario, ControladorMisFavoritos.eliminarFavorito);
+rutasFavoritos.post("/usuarios/:usuarioId/mis-favoritos/agregar/producto/:id", Middle.eresEseUsuario, ControladorMisFavoritos.agregarFavorito);
 
 export default rutasFavoritos;
