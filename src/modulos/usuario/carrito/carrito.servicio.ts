@@ -113,6 +113,7 @@ const obtenerProductos = async (id_usuario: number) => {
     `
     SELECT
       p.id,
+      p.imagen_url AS imagen_url,
       p.nombre AS nombre,
       m.nombre AS marca,
       p.stock AS stock,
