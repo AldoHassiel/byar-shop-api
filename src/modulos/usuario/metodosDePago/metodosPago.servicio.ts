@@ -4,7 +4,7 @@ import type { MetodoPagoDTO } from "./metodosPago.esquema.js";
 const obtenerMetodos = async (idUsuario: number) => {
   const consulta = await db.query(
     `
-    SELECT id, ultimos_digitos, marca, es_predeterminada
+    SELECT id, nombre_titular, ultimos_digitos, marca, es_predeterminada
    FROM metodos_de_pago
    WHERE activo = TRUE AND id_usuario = $1
    ORDER BY es_predeterminada DESC
