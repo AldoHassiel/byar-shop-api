@@ -121,7 +121,7 @@ const obtenerProductos = async (id_usuario: number) => {
       c.cantidad,
       p.precio * c.cantidad AS total,
       p.id_subcategoria AS id_subcategoria,
-      c.id AS id_categoria,
+      ca.id AS id_categoria,
       p.id_marca AS id_marca
     FROM carrito c
     INNER JOIN productos p
