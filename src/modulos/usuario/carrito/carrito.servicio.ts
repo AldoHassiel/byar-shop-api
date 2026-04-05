@@ -115,6 +115,7 @@ const obtenerProductos = async (id_usuario: number) => {
       p.id,
       p.imagen_url AS imagen_url,
       p.nombre AS nombre,
+      p.descripcion AS descripcion,
       m.nombre AS marca,
       p.stock AS stock,
       c.cantidad,
