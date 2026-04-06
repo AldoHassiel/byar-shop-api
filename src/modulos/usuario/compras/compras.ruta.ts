@@ -17,7 +17,7 @@ rutasCompras.get(
 );
 
 rutasCompras.post(
-  "usuario/:usuarioId/compras/",
+  "/usuario/:usuarioId/compras/",
   Middle.eresEseUsuario,
   ControladorCompras.realizarCompra,
 );
