@@ -16,4 +16,10 @@ rutasCompras.get(
   ControladorCompras.obtenerDetalleCompra,
 );
 
+rutasCompras.post(
+  "usuario/:usuarioId/compras/",
+  Middle.eresEseUsuario,
+  ControladorCompras.realizarCompra,
+);
+
 export default rutasCompras;

@@ -1,6 +1,11 @@
-import { respuestaError, respuestaOk } from "@/utilidades/respuesta.js";
+import {
+  respuestaError,
+  respuestaErrorValidacion,
+  respuestaOk,
+} from "@/utilidades/respuesta.js";
 import type { Request, Response } from "express";
 import { ServicioCompras } from "./compras.servicio.js";
+import { esquemaCompra } from "./compras.esquema.js";
 
 const obtenerCompras = async (req: Request, res: Response) => {
   if (!req.usuario?.id) {
@@ -45,7 +50,32 @@ const obtenerDetalleCompra = async (req: Request, res: Response) => {
   }
 };
 
+const realizarCompra = async (req: Request, res: Response) => {
+  if (!req.usuario?.id) {
+    return respuestaError(res, "Hace falta el id en el token", 400);
+  }
+
+  const datos = esquemaCompra.safeParse(req.body);
+
+  if (!datos.success) {
+    return respuestaErrorValidacion(res, datos.error);
+  }
+
+  try {
+    await ServicioCompras.realizarCompra(req.usuario?.id, datos.data);
+    return respuestaOk(res, "Compra realizada con éxito", []);
+  } catch (error) {
+    console.log(error);
+    if (error instanceof Error) {
+      const esConflicto = error.message.includes("Stock insuficiente");
+      return respuestaError(res, error.message, esConflicto ? 409 : 400);
+    }
+    return respuestaError(res, "Error interno del servidor");
+  }
+};
+
 export const ControladorCompras = {
   obtenerCompras,
   obtenerDetalleCompra,
+  realizarCompra,
 };

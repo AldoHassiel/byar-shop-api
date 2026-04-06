@@ -1,4 +1,5 @@
 import { db } from "@/config/db.js";
+import type { CompraDTO } from "./compras.esquema.js";
 
 const obtenerCompras = async (id_usuario: number) => {
   const query = `
@@ -81,7 +82,22 @@ const obtenerDetalleCompra = async (id_usuario: number, id_compra: number) => {
   return { pedido, productos };
 };
 
+const realizarCompra = async (id_usuario: number, datos: CompraDTO) => {
+  const resultado = await db.query(`CALL realizar_compra($1, $2, $3, NULL)`, [
+    id_usuario,
+    datos.id_direccion,
+    datos.id_tarjeta,
+  ]);
+
+  const error = resultado.rows[0]?.p_error ?? null;
+
+  if (error) {
+    throw new Error(error);
+  }
+};
+
 export const ServicioCompras = {
   obtenerCompras,
   obtenerDetalleCompra,
+  realizarCompra,
 };

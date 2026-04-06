@@ -1,94 +1,80 @@
 CREATE OR REPLACE PROCEDURE realizar_compra(
-	p_id_usuario INT,
-	p_id_direccion INT,
-	p_id_metodo_de_pago INT,
-	OUT p_error TEXT
+    p_id_usuario INT,
+    p_id_direccion INT,
+    p_id_metodo_de_pago INT,
+    OUT p_error TEXT
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-	v_subtotal NUMERIC;
-	v_costo_de_envio NUMERIC;
-	v_id_pedido INT;
-	v_producto RECORD;
+    v_subtotal NUMERIC;
+    v_costo_de_envio NUMERIC;
+    v_id_pedido INT;
+    v_producto RECORD;
 BEGIN
-	p_error := NULL;
+    p_error := NULL;
 
-	SELECT
+    SELECT
         SUM(p.precio * c.cantidad),
         e.costo
     INTO
         v_subtotal,
         v_costo_de_envio
     FROM carrito c
-    INNER JOIN productos p  ON p.id = c.id_producto
+    INNER JOIN productos p ON p.id = c.id_producto
     INNER JOIN direcciones d ON d.id = p_id_direccion
     INNER JOIN costos_envio e ON e.estado = d.estado
     WHERE c.id_usuario = p_id_usuario
     GROUP BY e.costo;
 
-	IF v_subtotal IS NULL THEN
+    IF v_subtotal IS NULL THEN
         p_error := 'Carrito vacío o no encontrado';
         RETURN;
     END IF;
 
-	FOR v_producto IN
-		SELECT
-			p.id,
-			p.nombre,
-			p.stock,
-			c.cantidad
-		FROM carrito c
-		INNER JOIN productos p
-		ON p.id = c.id_producto
-		WHERE c.id_usuario = p_id_usuario
-	LOOP
-		IF v_producto.stock < v_producto.cantidad THEN
-			p_error := 'Stock insuficiente para el producto ' || v_producto.nombre;
-			RETURN;
-		END IF;
-	END LOOP;
+    FOR v_producto IN
+        SELECT p.id, p.nombre, p.stock, c.cantidad
+        FROM carrito c
+        INNER JOIN productos p ON p.id = c.id_producto
+        WHERE c.id_usuario = p_id_usuario
+    LOOP
+        IF v_producto.stock < v_producto.cantidad THEN
+            p_error := 'Stock insuficiente para el producto ' || v_producto.nombre;
+            RETURN;
+        END IF;
+    END LOOP;
 
-	INSERT INTO pedidos (
-		subtotal, 
-		costo_envio, 
-		fecha_entrega_estimada, 
-		fecha_entrego,
-		id_usuario,
-		id_direccion,
-		id_metodo_de_pago,
-		id_estado
-	)
-	VALUES (
-		v_subtotal,
-		v_costo_de_envio,
-		NOW() + INTERVAL '7 days',
-		NULL,
-		p_id_usuario,
-		p_id_direccion,
-		p_id_metodo_de_pago,
-		1
-	)
-	RETURNING id INTO v_id_pedido;
+    BEGIN
+        INSERT INTO pedidos (
+            subtotal, costo_envio, fecha_entrega_estimada, fecha_entrego,
+            id_usuario, id_direccion, id_metodo_de_pago, id_estado
+        )
+        VALUES (
+            v_subtotal, v_costo_de_envio, NOW() + INTERVAL '7 days',
+            NULL, p_id_usuario, p_id_direccion, p_id_metodo_de_pago, 1
+        )
+        RETURNING id INTO v_id_pedido;
 
-	INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio)
-    SELECT
-        v_id_pedido,
-        c.id_producto,
-        c.cantidad,
-        p.precio
-    FROM carrito c
-    INNER JOIN productos p ON p.id = c.id_producto
-    WHERE c.id_usuario = p_id_usuario;
+        INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio)
+        SELECT v_id_pedido, c.id_producto, c.cantidad, p.precio
+        FROM carrito c
+        INNER JOIN productos p ON p.id = c.id_producto
+        WHERE c.id_usuario = p_id_usuario;
 
-	UPDATE productos p
-    SET stock = p.stock - c.cantidad
-    FROM carrito c
-    WHERE c.id_usuario = p_id_usuario
-    AND p.id = c.id_producto;
+        UPDATE productos p
+        SET stock = p.stock - c.cantidad
+        FROM carrito c
+        WHERE c.id_usuario = p_id_usuario
+        AND p.id = c.id_producto;
 
-	DELETE FROM carrito
-    WHERE id_usuario = p_id_usuario;
+        DELETE FROM carrito
+        WHERE id_usuario = p_id_usuario;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            p_error := 'Error al procesar la compra: ' || SQLERRM;
+    END;
+
 END;
 $$;
 
