@@ -130,16 +130,38 @@ DROP FUNCTION obtener_producto();
 
 SELECT * FROM obtener_producto(10);
 
--- CARRITO
-CREATE OR REPLACE FUNCTION agregar_carrito(
-	p.id_usuario INT NOT NULL,
-	p_id_producto INT NOT NULL,
-	p_cantidad INT NOT NULL,
+-- PEDIDOS --
+CREATE OR REPLACE FUNCTION obtener_pedidos(
+	p_id_pedido INT DEFAULT NULL,
+	p_nombre_usuario TEXT DEFAULT NULL,
+	p_direccion_ciudad TEXT DEFAULT NULL,
+	p_direccion_estado TEXT DEFAULT NULL,
+	p_id_estado INT DEFAULT NULL,
+	p_fecha_inicio DATE DEFAULT NULL,
+	p_fecha_fin DATE DEFAULT NULL,
+	p_periodo_dias INT DEFAULT
 )
+RETURNS TABLE (
+	id INT,
+	usuario_nombre VARCHAR(100),
+	usuario_apellidos VARCHAR(100),
+	direccion_calle VARCHAR(150),
+	direccion_numero_exterior VARCHAR(20),
+	direccion_numero_interior VARCHAR(20),
+	direccion_colonia VARCHAR(100),
+	direccion_ciudad VARCHAR(100),
+	direccion_municipio VARCHAR(100),
+	direccion_estado VARCHAR(100),
+	direccion_codigo_postal VARCHAR(10),
+	direccion_pais VARCHAR(100),
+	direccion_especificaciones VARCHAR(255),
+	estado VARCHAR(50),
+	total NUMERIC
+)
+LANGUAGE plpgsql
 AS $$
-DECLARE
-	cantidad INT;
 BEGIN
-	
-END
-$$ LANGUAGE plpgsql;
+END;
+$$;
+
+
