@@ -132,36 +132,109 @@ SELECT * FROM obtener_producto(10);
 
 -- PEDIDOS --
 CREATE OR REPLACE FUNCTION obtener_pedidos(
-	p_id_pedido INT DEFAULT NULL,
-	p_nombre_usuario TEXT DEFAULT NULL,
-	p_direccion_ciudad TEXT DEFAULT NULL,
-	p_direccion_estado TEXT DEFAULT NULL,
-	p_id_estado INT DEFAULT NULL,
-	p_fecha_inicio DATE DEFAULT NULL,
-	p_fecha_fin DATE DEFAULT NULL,
-	p_periodo_dias INT DEFAULT
+    p_id_pedido INT DEFAULT NULL,
+    p_nombre_usuario TEXT DEFAULT NULL,
+    p_direccion TEXT DEFAULT NULL,
+    p_estado_pedido INT DEFAULT 0,
+    p_fecha_inicio DATE DEFAULT NULL,
+    p_fecha_fin DATE DEFAULT NULL,
+    p_periodo_dias INT DEFAULT NULL
 )
 RETURNS TABLE (
-	id INT,
-	usuario_nombre VARCHAR(100),
-	usuario_apellidos VARCHAR(100),
-	direccion_calle VARCHAR(150),
-	direccion_numero_exterior VARCHAR(20),
-	direccion_numero_interior VARCHAR(20),
-	direccion_colonia VARCHAR(100),
-	direccion_ciudad VARCHAR(100),
-	direccion_municipio VARCHAR(100),
-	direccion_estado VARCHAR(100),
-	direccion_codigo_postal VARCHAR(10),
-	direccion_pais VARCHAR(100),
-	direccion_especificaciones VARCHAR(255),
-	estado VARCHAR(50),
-	total NUMERIC
+    id INT,
+    usuario_nombre VARCHAR(100),
+    usuario_apellidos VARCHAR(100),
+    direccion_calle VARCHAR(150),
+    direccion_numero_exterior VARCHAR(20),
+    direccion_numero_interior VARCHAR(20),
+    direccion_colonia VARCHAR(100),
+    direccion_ciudad VARCHAR(100),
+    direccion_municipio VARCHAR(100),
+    direccion_estado VARCHAR(100),
+    direccion_codigo_postal VARCHAR(10),
+    direccion_pais VARCHAR(100),
+    direccion_especificaciones VARCHAR(255),
+    tarjeta_marca VARCHAR(50),
+    estado VARCHAR(50)
 )
-LANGUAGE plpgsql
 AS $$
 BEGIN
+    RETURN QUERY
+    SELECT
+        p.id,
+        u.nombre,
+        u.apellidos,
+        d.calle,
+        d.numero_exterior,
+        d.numero_interior,
+        d.colonia,
+        d.ciudad,
+        d.municipio,
+        d.estado,
+        d.codigo_postal,
+        d.pais,
+        d.especificaciones,
+        m.marca,
+        e.nombre
+    FROM pedidos p
+    JOIN usuarios u
+        ON u.id  = p.id_usuario
+    JOIN direcciones d
+        ON d.id  = p.id_direccion
+    JOIN metodos_de_pago m
+        ON m.id  = p.id_metodo_de_pago
+    JOIN estados_pedido e
+        ON e.id  = p.id_estado
+    WHERE
+        (p_id_pedido IS NULL OR p.id = p_id_pedido)
+
+        AND (p_nombre_usuario IS NULL
+            OR u.nombre ILIKE '%' || p_nombre_usuario || '%'
+            OR u.apellidos ILIKE '%' || p_nombre_usuario || '%')
+
+        AND (p_direccion IS NULL
+            OR d.calle ILIKE '%' || p_direccion || '%'
+            OR d.numero_exterior ILIKE '%' || p_direccion || '%'
+            OR d.colonia ILIKE '%' || p_direccion || '%'
+            OR d.ciudad ILIKE '%' || p_direccion || '%'
+            OR d.municipio ILIKE '%' || p_direccion || '%'
+            OR d.estado ILIKE '%' || p_direccion || '%'
+            OR d.codigo_postal ILIKE '%' || p_direccion || '%'
+            OR d.pais ILIKE '%' || p_direccion || '%'
+            OR d.especificaciones ILIKE '%' || p_direccion || '%')
+
+        AND (COALESCE(p_estado_pedido, 0) = 0
+            OR p.id_estado = p_estado_pedido)
+
+        AND (
+            CASE
+                WHEN p_periodo_dias IS NOT NULL THEN
+                    p.fecha >= NOW() - (p_periodo_dias || ' days')::INTERVAL
+                ELSE
+                    (p_fecha_inicio IS NULL OR p.fecha >= p_fecha_inicio)
+                    AND
+                    (p_fecha_fin IS NULL OR p.fecha < p_fecha_fin + INTERVAL '1 day')
+            END
+        )
+
+    ORDER BY
+        CASE
+            WHEN COALESCE(p_estado_pedido, 0) = 0
+            THEN CASE p.id_estado
+                WHEN 1 THEN 1
+                WHEN 2 THEN 2
+                WHEN 3 THEN 3
+                ELSE 4
+            END
+            ELSE NULL
+        END ASC NULLS LAST,
+        p.fecha ASC;
 END;
-$$;
+$$ LANGUAGE plpgsql;
+
+SELECT * FROM pedidos;
 
 
+SELECT COUNT(*) AS total_productos FROM productos WHERE activo = TRUE
+SELECT COUNT(*) AS total_ventas FROM pedidos WHERE id_estado = 2
+SELECT COALESCE(SUM(total), 0) AS total_ganancias FROM pedidos WHERE id_estado = 2
