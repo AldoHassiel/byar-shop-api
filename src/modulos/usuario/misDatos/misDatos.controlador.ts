@@ -109,6 +109,10 @@ const editarPwd = async (req: Request, res: Response) => {
     console.log(error);
     const mensaje = (error as Error).message;
 
+    if (mensaje == "La contraseña actual no coincide con la registrada") {
+      return respuestaError(res, mensaje, 409);
+    }
+
     if (mensaje == "No se pudo editar la contraseña") {
       return respuestaError(res, "No se pudo editar la contraseña", 409);
     }

@@ -19,7 +19,8 @@ export const esquemaEditarCorreo = z
 
 export const esquemaEditarPwd = z
   .object({
-    pwd: z.string().describe("Contraseña nuevo del usuario"),
+    pwd_actual: z.string().describe("Contraseña vieja del usuario"),
+    pwd_nuevo: z.string().describe("Contraseña nuevo del usuario"),
   })
   .openapi("EditarPwd");
 

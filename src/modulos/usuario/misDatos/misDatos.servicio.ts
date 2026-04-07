@@ -79,10 +79,24 @@ const editarCorreo = async (
 };
 
 const editarPwd = async (idUsuario: number, datos: MisDatosEditarPwdDTO) => {
-  const { pwd } = datos;
+  const { pwd_actual, pwd_nuevo } = datos;
+
+  const pwdActualRegistrado = await db.query(
+    `SELECT pwd FROM usuarios WHERE id = $1`,
+    [idUsuario],
+  );
+
+  const sonIguales = await bcrypt.compare(
+    pwd_actual,
+    pwdActualRegistrado.rows[0].pwd,
+  );
+
+  if (!sonIguales) {
+    throw Error("La contraseña actual no coincide con la registrada");
+  }
 
   const sal = await bcrypt.genSalt(SAL);
-  const pwdEncriptado = await bcrypt.hash(pwd, sal);
+  const pwdEncriptado = await bcrypt.hash(pwd_nuevo, sal);
 
   const consulta = await db.query(
     `
