@@ -16,7 +16,7 @@ rutasPedidos.get(
   ControladorPedidos.obtenerPedido,
 );
 
-rutasPedidos.put(
+rutasPedidos.patch(
   "/pedidos/:id",
   Middle.eresAdmin,
   ControladorPedidos.cambiarEstado,

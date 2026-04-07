@@ -238,3 +238,20 @@ SELECT * FROM pedidos;
 SELECT COUNT(*) AS total_productos FROM productos WHERE activo = TRUE
 SELECT COUNT(*) AS total_ventas FROM pedidos WHERE id_estado = 2
 SELECT COALESCE(SUM(total), 0) AS total_ganancias FROM pedidos WHERE id_estado = 2
+
+SELECT
+        pr.id,
+        pr.nombre,
+        pr.imagen_url,
+        SUM(dp.cantidad) AS total_vendido,
+        SUM(dp.subtotal) AS ingresos
+FROM detalle_pedido dp
+JOIN pedidos  pe 
+	ON pe.id = dp.id_pedido
+JOIN productos pr
+	ON pr.id = dp.id_producto
+WHERE pe.id_estado = 2
+GROUP BY pr.id, pr.nombre, pr.imagen_url
+ORDER BY total_vendido DESC
+LIMIT 5;
+
