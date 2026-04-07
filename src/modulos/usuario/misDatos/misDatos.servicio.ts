@@ -48,7 +48,25 @@ const editarCorreo = async (
   idUsuario: number,
   datos: MisDatosEditarCorreoDTO,
 ) => {
-  const { correo } = datos;
+  const { correo, pwd_actual } = datos;
+
+  const pwdActualRegistrado = await db.query(
+    `SELECT pwd FROM usuarios WHERE id = $1 AND activo = TRUE`,
+    [idUsuario],
+  );
+
+  if (!pwdActualRegistrado.rowCount) {
+    throw Error("No se pudo editar el correo");
+  }
+
+  const sonIguales = await bcrypt.compare(
+    pwd_actual,
+    pwdActualRegistrado.rows[0].pwd,
+  );
+
+  if (!sonIguales) {
+    throw Error("La contraseña actual no coincide con la registrada");
+  }
 
   const consultaId = await db.query(
     `
@@ -59,7 +77,7 @@ const editarCorreo = async (
   );
 
   if (consultaId.rowCount && consultaId.rowCount > 0) {
-    new Error("Ese correo ya existe");
+    throw Error("Ese correo ya existe");
   }
 
   const consultaActualizar = await db.query(
@@ -82,9 +100,13 @@ const editarPwd = async (idUsuario: number, datos: MisDatosEditarPwdDTO) => {
   const { pwd_actual, pwd_nuevo } = datos;
 
   const pwdActualRegistrado = await db.query(
-    `SELECT pwd FROM usuarios WHERE id = $1`,
+    `SELECT pwd FROM usuarios WHERE id = $1 AND activo = TRUE`,
     [idUsuario],
   );
+
+  if (!pwdActualRegistrado.rowCount) {
+    throw Error("No se pudo editar la contraseña");
+  }
 
   const sonIguales = await bcrypt.compare(
     pwd_actual,

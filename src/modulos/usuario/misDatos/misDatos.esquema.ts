@@ -13,14 +13,24 @@ export const esquemaEditarMisDatos = z
 
 export const esquemaEditarCorreo = z
   .object({
-    correo: z.string().describe("Correo nuevo del usuario"),
+    correo: z.string().email().describe("Correo nuevo del usuario"),
+    pwd_actual: z
+      .string()
+      .min(8, "La contraseña actual debe tener al menos 8 caracteres")
+      .describe("Contraseña actual del usuario"),
   })
   .openapi("EditarCorreo");
 
 export const esquemaEditarPwd = z
   .object({
-    pwd_actual: z.string().describe("Contraseña vieja del usuario"),
-    pwd_nuevo: z.string().describe("Contraseña nuevo del usuario"),
+    pwd_actual: z
+      .string()
+      .min(8, "La contraseña actual debe tener al menos 8 caracteres")
+      .describe("Contraseña antigua del usuario"),
+    pwd_nuevo: z
+      .string()
+      .min(8, "La nueva contraseña debe tener al menos 8 caracteres")
+      .describe("Contraseña nueva del usuario"),
   })
   .openapi("EditarPwd");
 

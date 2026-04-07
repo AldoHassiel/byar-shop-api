@@ -79,6 +79,10 @@ const editarCorreo = async (req: Request, res: Response) => {
     console.log(error);
     const mensaje = (error as Error).message;
 
+    if (mensaje == "La contraseña actual no coincide con la registrada") {
+      return respuestaError(res, mensaje, 409);
+    }
+
     if (mensaje == "Ese correo ya existe") {
       return respuestaError(res, "Ese correo ya existe", 409);
     }
