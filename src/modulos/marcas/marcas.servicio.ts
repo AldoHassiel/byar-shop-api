@@ -7,7 +7,9 @@ const obtenerMarcas = async (es_admin: boolean | undefined) => {
       `
       SELECT id, nombre, descripcion, cant_producto
       FROM marcas
-      WHERE activo = $1`,
+      WHERE activo = $1
+      ORDER BY cant_producto DESC
+      `,
       [true],
     );
 

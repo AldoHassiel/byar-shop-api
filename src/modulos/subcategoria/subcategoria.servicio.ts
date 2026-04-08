@@ -2,11 +2,9 @@ import { db } from "@/config/db.js";
 import { type SubcategoriaDTO } from "./subcategoria.esquema.js";
 import { ca } from "zod/locales";
 
-const obtenerCategoriasConSubcategorias = async (
-) => {
-
+const obtenerCategoriasConSubcategorias = async () => {
   const consulta = await db.query(
-    `SELECT 
+    `SELECT
       c.id AS id_categoria,
       c.nombre AS categoria,
       COALESCE(
@@ -20,7 +18,7 @@ const obtenerCategoriasConSubcategorias = async (
         '[]'
       ) AS subcategorias
     FROM categorias c
-    LEFT JOIN subcategorias s 
+    LEFT JOIN subcategorias s
       ON s.id_categoria = c.id AND s.activo = true
     WHERE c.activo = true
     GROUP BY c.id;`,
@@ -55,7 +53,9 @@ const obtenerSubcategoria = async (
   if (es_admin) {
     const consulta = await db.query(
       `SELECT id, id_categoria, nombre, descripcion, cant_producto
-      FROM subcategorias WHERE id = $1 AND activo = $2`,
+      FROM subcategorias WHERE id = $1 AND activo = $2
+      ORDER BY cant_producto DESC
+      `,
       [id, true],
     );
 

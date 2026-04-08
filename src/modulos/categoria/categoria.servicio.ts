@@ -5,7 +5,9 @@ const obtenerCategorias = async (es_admin: boolean | undefined) => {
   if (es_admin) {
     const consulta = await db.query(
       `SELECT id, nombre, descripcion, cant_producto
-      FROM categorias WHERE activo = $1`,
+      FROM categorias WHERE activo = $1
+      ORDER BY cant_producto DESC
+      `,
       [true],
     );
 
@@ -14,7 +16,8 @@ const obtenerCategorias = async (es_admin: boolean | undefined) => {
 
   const consulta = await db.query(
     `SELECT id, nombre
-    FROM categorias WHERE activo = $1`,
+    FROM categorias WHERE activo = $1
+    `,
     [true],
   );
   return consulta.rows;
