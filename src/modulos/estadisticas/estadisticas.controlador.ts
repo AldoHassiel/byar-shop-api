@@ -5,7 +5,7 @@ import { ServicioEstadisticas } from "./estadisticas.servicio.js";
 const obtenerEstadisticas = async (req: Request, res: Response) => {
   try {
     const datos = await ServicioEstadisticas.obtenerEstadisticas();
-    return respuestaOk(res, "Estadisticas obtenidas con éxito", datos);
+    return respuestaOk(res, "Estadisticas obtenidas con éxito", [datos]);
   } catch (error) {
     console.log(error);
     respuestaError(res, "Error interno del servidor");
