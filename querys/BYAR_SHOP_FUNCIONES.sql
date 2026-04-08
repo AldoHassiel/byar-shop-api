@@ -255,3 +255,77 @@ GROUP BY pr.id, pr.nombre, pr.imagen_url
 ORDER BY total_vendido DESC
 LIMIT 5;
 
+CREATE OR REPLACE FUNCTION obtener_estadisticas()
+RETURNS JSON
+AS $$
+DECLARE
+    resultado JSON;
+BEGIN
+    SELECT json_build_object(
+        'datos_generales', (
+            SELECT json_build_object(
+                'total_productos', COUNT(*),
+                'total_ventas', (SELECT COUNT(*) FROM pedidos),
+                'total_ganancias', (SELECT COALESCE(SUM(total), 0) FROM pedidos)
+            )
+            FROM productos
+            WHERE activo = TRUE
+        ),
+        'ganancias_totales', (
+            SELECT json_agg(t ORDER BY t.anio)
+            FROM (
+                SELECT
+                    a.anio,
+                    COALESCE(v.ganancias, 0) AS ganancias
+                FROM generate_series(
+                        EXTRACT(YEAR FROM NOW()) - 4,
+                        EXTRACT(YEAR FROM NOW()),
+                        1
+                ) AS a(anio)
+                LEFT JOIN (
+                    SELECT
+                        EXTRACT(YEAR FROM fecha) AS anio,
+                        SUM(total) AS ganancias
+                    FROM pedidos
+                    GROUP BY 1
+                ) v ON a.anio = v.anio
+            ) t
+        ),
+        'venta_mes', (
+            SELECT json_agg(t ORDER BY t.mes)
+            FROM (
+                SELECT
+                    TO_CHAR(m.mes, 'YYYY-MM') AS mes,
+                    COALESCE(v.ventas, 0) AS ventas
+                FROM generate_series(
+                        DATE_TRUNC('month', NOW()) - INTERVAL '4 months',
+                        DATE_TRUNC('month', NOW()),
+                        INTERVAL '1 month'
+                ) AS m(mes)
+                LEFT JOIN (
+                    SELECT
+                        DATE_TRUNC('month', fecha) AS mes,
+                        COUNT(*) AS ventas
+                    FROM pedidos
+                    GROUP BY 1
+                ) v ON m.mes = v.mes
+            ) t
+        ),
+        'top_productos', (
+            SELECT json_agg(t)
+            FROM (
+                SELECT
+                    pr.nombre AS producto,
+                    SUM(dp.cantidad) AS total_vendido
+                FROM pedidos p
+                JOIN detalle_pedido dp ON dp.id_pedido = p.id
+                JOIN productos pr ON pr.id = dp.id_producto
+                GROUP BY pr.nombre
+                ORDER BY total_vendido DESC
+                LIMIT 5
+            ) t
+        )
+    ) INTO resultado;
+    RETURN resultado;
+END;
+$$ LANGUAGE plpgsql;
