@@ -41,6 +41,7 @@ import rutaCarrito from "./modulos/usuario/carrito/carrito.ruta.js";
 import rutasFavoritos from "./modulos/mis-favoritos/misFavoritos.ruta.js";
 import rutasCompras from "./modulos/usuario/compras/compras.ruta.js";
 import rutasPedidos from "./modulos/pedidos/pedidos.ruta.js";
+import rutasEstadisticas from "./modulos/estadisticas/estadisticas.ruta.js";
 
 registro.registerComponent("securitySchemes", "autenticacionBearer", {
   type: "http",
@@ -80,6 +81,7 @@ app.use(rutaCarrito);
 app.use(rutasFavoritos);
 app.use(rutasCompras);
 app.use(rutasPedidos);
+app.use(rutasEstadisticas);
 
 const especificacion = generarDocumentacion();
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(especificacion));
