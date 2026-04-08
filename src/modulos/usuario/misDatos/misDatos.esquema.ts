@@ -7,7 +7,7 @@ export const esquemaEditarMisDatos = z
   .object({
     nombre: z.string().max(100).describe("Nombre del usuario"),
     apellidos: z.string().describe("Apellidos del usuario"),
-    telefono: z.string().describe("Telefono del usuario"),
+    telefono: z.string().describe("Telefono del usuario").optional(),
   })
   .openapi("MisDatos");
 
