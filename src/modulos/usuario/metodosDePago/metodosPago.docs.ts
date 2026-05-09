@@ -126,9 +126,9 @@ registro.registerPath({
   },
 });
 
-// PUT /usuario/:usuarioId/metodosPago/:id/predeterminada
+// PATCH /usuario/:usuarioId/metodosPago/:id/predeterminada
 registro.registerPath({
-  method: "put",
+  method: "patch",
   path: "/usuario/{usuarioId}/metodosPago/{id}/predeterminada",
   tags: [ETIQUETA],
   summary: "Establecer un método de pago como predeterminado",
