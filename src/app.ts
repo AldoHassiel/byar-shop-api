@@ -21,7 +21,6 @@ import rutasEstadosPedidos from "./modulos/estadosPedidos/estados.ruta.js";
 import rutasDirecciones from "./modulos/usuario/direcciones/direcciones.ruta.js";
 import rutasMetodosPago from "./modulos/usuario/metodosDePago/metodosPago.ruta.js";
 import rutasNegocio from "./modulos/negocio/negocio.ruta.js";
-import "@/modulos/usuario/misDatos/misDatos.ruta.js";
 
 import "@/modulos/productos/productos.docs.js";
 import "@/modulos/autenticacion/autenticacion.docs.js";
@@ -33,6 +32,14 @@ import "@/modulos/usuario/direcciones/direcciones.docs.js";
 import "@/modulos/usuario/metodosDePago/metodosPago.docs.js";
 import "@/modulos/cp/cp.docs.js";
 import "@/modulos/estadosPedidos/estados.docs.js";
+import "@/modulos/test/test.docs.js";
+import "@/modulos/negocio/negocio.docs.js";
+import "@/modulos/estadisticas/estadisticas.docs.js";
+import "@/modulos/mis-favoritos/misFavoritos.docs.js";
+import "@/modulos/usuario/misDatos/misDatos.docs.js";
+import "@/modulos/usuario/compras/compras.docs.js";
+import "@/modulos/usuario/carrito/carrito.docs.js";
+import "@/modulos/pedidos/pedidos.docs.js";
 
 import { registro } from "./config/openAPI/openAPI.registro.js";
 import { generarDocumentacion } from "./config/openAPI/openAPI.config.js";

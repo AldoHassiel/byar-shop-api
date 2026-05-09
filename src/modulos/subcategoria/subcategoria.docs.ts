@@ -10,7 +10,6 @@ registro.registerPath({
   path: "/subcategorias",
   tags: [ETIQUETA],
   summary: "Listar todas las subcategorías",
-  security: [{ autenticacionBearer: [] }],
   responses: {
     200: {
       description: "Lista de subcategorías obtenida exitosamente",
@@ -30,7 +29,27 @@ registro.registerPath({
         },
       },
     },
-    401: { description: "No autorizado - token requerido" },
+  },
+});
+
+// GET /categorias-subcategorias
+registro.registerPath({
+  method: "get",
+  path: "/categorias-subcategorias",
+  tags: [ETIQUETA],
+  summary: "Obtener categorías con sus subcategorías",
+  responses: {
+    200: {
+      description: "Categorías con subcategorías obtenidas exitosamente",
+      content: {
+        "application/json": {
+          schema: z.object({
+            mensaje: z.string(),
+            datos: z.array(z.any()),
+          }),
+        },
+      },
+    },
   },
 });
 
@@ -40,7 +59,6 @@ registro.registerPath({
   path: "/subcategorias/{id}",
   tags: [ETIQUETA],
   summary: "Obtener una subcategoría por ID",
-  security: [{ autenticacionBearer: [] }],
   request: {
     params: z.object({
       id: z
