@@ -10,7 +10,6 @@ registro.registerPath({
   path: "/categorias",
   tags: [ETIQUETA],
   summary: "Listar todas las categorías",
-  security: [{ autenticacionBearer: [] }],
   responses: {
     200: {
       description: "Lista de categorías obtenida exitosamente",
@@ -29,7 +28,6 @@ registro.registerPath({
         },
       },
     },
-    401: { description: "No autorizado - token requerido" },
   },
 });
 
@@ -39,7 +37,6 @@ registro.registerPath({
   path: "/categorias/{id}",
   tags: [ETIQUETA],
   summary: "Obtener una categoría por ID",
-  security: [{ autenticacionBearer: [] }],
   request: {
     params: z.object({
       id: z

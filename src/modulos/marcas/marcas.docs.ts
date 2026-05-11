@@ -10,7 +10,6 @@ registro.registerPath({
   path: "/marcas",
   tags: [ETIQUETA],
   summary: "Listar todas las marcas",
-  security: [{ autenticacionBearer: [] }],
   responses: {
     200: {
       description: "Lista de marcas obtenida exitosamente",
@@ -29,7 +28,6 @@ registro.registerPath({
         },
       },
     },
-    401: { description: "No autorizado - token requerido" },
   },
 });
 
@@ -39,7 +37,6 @@ registro.registerPath({
   path: "/marcas/{id}",
   tags: [ETIQUETA],
   summary: "Obtener una marca por ID",
-  security: [{ autenticacionBearer: [] }],
   request: {
     params: z.object({
       id: z.string().openapi({ description: "ID de la marca", example: "1" }),
